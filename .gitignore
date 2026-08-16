@@ -1,0 +1,6 @@
+# Logs & temporary files
+.DS_Store
+*.log
+__pycache__/
+.env
+.gemini/

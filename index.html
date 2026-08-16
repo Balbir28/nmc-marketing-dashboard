@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NMC Healthcare (UAE) — Performance Marketing & Call Center Intelligence Hub</title>
+  <meta name="description" content="Multi-location Performance Marketing & Call Center Intelligence Hub for NMC Hospitals & Sunny Clinics across UAE (AUH, DXB, Northern Emirates, Sunny Clinics).">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Header & Master Tab Bar
+       ========================================================================== -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand-section">
+        <div class="brand-logo-badge">NMC</div>
+        <div class="brand-title-group">
+          <h1>NMC Healthcare (UAE)</h1>
+          <div class="brand-subtitle">
+            <span class="live-indicator"></span> Multi-Location Performance Marketing & Call Center Intelligence Hub
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Direct Connected Real Google Sheet Link Button -->
+        <a href="https://docs.google.com/spreadsheets/d/1WUlm0LJIHWykInkXuCyOmbeCFsEC2TF_RGChRGoXEt8/edit?gid=0#gid=0" target="_blank" class="btn-header sheets-btn" title="Open Your Connected Real Google Sheet on docs.google.com">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          📊 Open Connected Google Sheet
+        </a>
+
+        <!-- Download Master Sheet Template Button -->
+        <a href="NMC_Hospital_Master_Template.xlsx" download="NMC_Hospital_Master_Template.xlsx" class="btn-header" style="background:rgba(255,255,255,0.15);" title="Download Pre-Formatted Excel/Google Sheet Master Template">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          📥 Download .xlsx
+        </a>
+
+        <button id="btnOpenParser" class="btn-header" title="Test automated extraction of Hospital Branch and Speciality from Campaign Names">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          Parser Tester
+        </button>
+        <button class="btn-header" onclick="APP.copyBulkActionPlan()" title="Copy all recommended Next Steps for Google Ads Editor / Bulk Sheet">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+          Copy Next Steps
+        </button>
+        <button class="btn-header" onclick="APP.exportFilteredKeywords()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- PRIMARY APP VIEW TABS (Discrete High-Contrast Navigation) -->
+    <div class="main-app-nav-tabs">
+      <button class="main-tab-pill active" data-tab="overview">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>1. Executive Scorecard & Funnel</span>
+      </button>
+
+      <button class="main-tab-pill" data-tab="tabular">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        <span>2. Granular Tabular Master Grid</span>
+      </button>
+
+      <button class="main-tab-pill" data-tab="chatbot">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>3. AI Marketing Copilot (Chatbot)</span>
+        <span class="badge-pill-alert">Live AI</span>
+      </button>
+
+      <button class="main-tab-pill" data-tab="googlesheets">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+        <span>4. Master Google Sheet & Sync Setup</span>
+      </button>
+    </div>
+
+    <!-- Territory / Region Navigation Pills -->
+    <div class="territory-nav-container">
+      <div class="territory-tab active" data-territory="ALL">
+        <span>🇦🇪 All UAE Accounts</span>
+        <span class="badge-count" id="count-ALL">0 kw</span>
+      </div>
+      <div class="territory-tab" data-territory="AUH">
+        <span>📍 AUH (Abu Dhabi)</span>
+        <span class="badge-count" id="count-AUH">0 kw</span>
+      </div>
+      <div class="territory-tab" data-territory="DXB">
+        <span>📍 DXB (Dubai)</span>
+        <span class="badge-count" id="count-DXB">0 kw</span>
+      </div>
+      <div class="territory-tab" data-territory="Northern Emirates">
+        <span>📍 Northern Emirates (Sharjah/Ajman/RAK)</span>
+        <span class="badge-count" id="count-NorthernEmirates">0 kw</span>
+      </div>
+      <div class="territory-tab" data-territory="Sunny Clinics">
+        <span>🏥 Sunny Clinics (UAE-Wide)</span>
+        <span class="badge-count" id="count-SunnyClinics">0 kw</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       TOP FOLD: Healthcare Performance Filter Bar (Without Match Type)
+       ========================================================================== -->
+  <div class="controls-panel">
+    <div class="filters-group">
+      <!-- Date Presets & Calendar Range -->
+      <div class="filter-item">
+        <span class="filter-label">Date Presets</span>
+        <div class="date-preset-group">
+          <button class="date-preset-btn" data-preset="7d">Last 7D</button>
+          <button class="date-preset-btn" data-preset="14d">Last 14D</button>
+          <button class="date-preset-btn active" data-preset="30d">Last 30D</button>
+          <button class="date-preset-btn" data-preset="mtd">Month to Date</button>
+          <button class="date-preset-btn" data-preset="all">All Time</button>
+        </div>
+      </div>
+
+      <div class="filter-item">
+        <span class="filter-label">Calendar Start</span>
+        <input type="date" id="filterStartDate" class="filter-input" style="min-width: 125px;">
+      </div>
+
+      <div class="filter-item">
+        <span class="filter-label">Calendar End</span>
+        <input type="date" id="filterEndDate" class="filter-input" style="min-width: 125px;">
+      </div>
+
+      <!-- Hospital Branch -->
+      <div class="filter-item">
+        <span class="filter-label">Hospital / Clinic Facility</span>
+        <select id="filterBranch" class="filter-select">
+          <option value="ALL">All Hospitals & Clinics</option>
+        </select>
+      </div>
+
+      <!-- Department / Speciality -->
+      <div class="filter-item">
+        <span class="filter-label">Clinical Department</span>
+        <select id="filterDepartment" class="filter-select">
+          <option value="ALL">All Clinical Departments</option>
+        </select>
+      </div>
+
+      <!-- Doctor / Consultant -->
+      <div class="filter-item">
+        <span class="filter-label">Doctor / Consultant</span>
+        <select id="filterDoctor" class="filter-select">
+          <option value="ALL">All Doctors / Consultants</option>
+        </select>
+      </div>
+
+      <!-- Lead Status -->
+      <div class="filter-item">
+        <span class="filter-label">Call Center Lead Status</span>
+        <select id="filterLeadStatus" class="filter-select" style="min-width: 120px;">
+          <option value="ALL">All Statuses</option>
+          <option value="Booked">Booked</option>
+          <option value="Attended">Attended (Show-Up)</option>
+          <option value="Surgery Scheduled">Surgery / Procedure</option>
+          <option value="Not Booked">Not Booked (Lost)</option>
+          <option value="Follow Up">Follow Up</option>
+        </select>
+      </div>
+
+      <!-- Search Query -->
+      <div class="filter-item">
+        <span class="filter-label">Keyword / Campaign Search</span>
+        <input type="text" id="filterSearch" class="filter-input" placeholder="Search keywords, doctor, branch..." style="min-width: 170px;">
+      </div>
+    </div>
+
+    <div>
+      <button id="btnResetFilters" class="btn-header" style="background:#e2e8f0; color:#0f172a;">
+        Reset Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN CONTENT WRAPPER
+       ========================================================================== -->
+  <main class="main-wrapper">
+
+    <!-- ==========================================================================
+         TAB 1: Executive Scorecard & Funnel Overview (No Revenue)
+         ========================================================================== -->
+    <div id="view-overview" class="tab-view-content">
+
+      <!-- Section Title -->
+      <div class="section-divider-title" style="margin-top: 0.25rem;">
+        <h2>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+          Executive Numerical Scorecard (Google Ads & Call Center Lead Outcomes)
+        </h2>
+        <p>Precise blended metrics reflecting ad investments, patient appointments, CPBA, and show-up rates</p>
+      </div>
+
+      <!-- Top KPI Ribbon -->
+      <section class="kpi-ribbon">
+        <div class="kpi-card" style="--card-accent: #028090;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Google Ads Spend</span>
+            <span>💰</span>
+          </div>
+          <div class="kpi-value" id="kpiSpend">AED 0</div>
+          <div class="kpi-footer">
+            <span>Avg CPC:</span> <span class="badge-highlight" id="kpiAvgCPC">AED 0.00</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #00a896;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Inbound Leads</span>
+            <span>📞</span>
+          </div>
+          <div class="kpi-value" id="kpiLeads">0</div>
+          <div class="kpi-footer">
+            <span>Calls + Web Inquiries</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #10b981;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Confirmed Bookings</span>
+            <span>📅</span>
+          </div>
+          <div class="kpi-value" id="kpiBooked" style="color:#10b981;">0 (0.0%)</div>
+          <div class="kpi-footer">
+            <span>Lead-to-Booking Conv %</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #0284c7;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Cost Per Booked Appt</span>
+            <span>🎯</span>
+          </div>
+          <div class="kpi-value" id="kpiCPBA" style="color:#0284c7;">AED 0.00</div>
+          <div class="kpi-footer">
+            <span>CPBA (Spend / Booked)</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #8b5cf6;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Attended Patients</span>
+            <span>🏥</span>
+          </div>
+          <div class="kpi-value" id="kpiAttended">0 (0.0%)</div>
+          <div class="kpi-footer">
+            <span>Hospital Show-up Rate</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #ec4899;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Surgeries / Procedures</span>
+            <span>🩺</span>
+          </div>
+          <div class="kpi-value" id="kpiSurgeries" style="color: #6d28d9;">0</div>
+          <div class="kpi-footer">
+            <span>Scheduled Interventions</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #05668d;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Search Top of Page Rate</span>
+            <span>🏆</span>
+          </div>
+          <div class="kpi-value" id="kpiTopIS">0.0%</div>
+          <div class="kpi-footer">
+            <span>Top IS Position #1-2</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #e76f51;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Call Center Turnaround</span>
+            <span>⏱️</span>
+          </div>
+          <div class="kpi-value" id="kpiRespTime" style="color: #0f172a;">0.0 mins</div>
+          <div class="kpi-footer">
+            <span>Avg Response Time</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step Funnel Progression -->
+      <div class="content-card" style="padding: 1.15rem 1.35rem; margin-bottom: 1.25rem;">
+        <div class="card-header-row" style="margin-bottom: 0.85rem;">
+          <div class="card-title-group">
+            <h3>Full-Funnel Patient Progression (Numerical Conversion Steps)</h3>
+            <p>Precise conversion drop-off from Search Impression to Confirmed Hospital Procedure</p>
+          </div>
+        </div>
+        <div class="numerical-funnel-grid">
+          <div class="funnel-step-box">
+            <div class="funnel-step-num">Step 1: Impressions</div>
+            <div class="funnel-step-val" id="funnelValImpr">0</div>
+            <div class="funnel-step-sub" id="funnelSubImpr">100% Reach</div>
+          </div>
+          <div class="funnel-step-box">
+            <div class="funnel-step-num">Step 2: Clicks</div>
+            <div class="funnel-step-val" id="funnelValClicks">0</div>
+            <div class="funnel-step-sub" id="funnelSubClicks">0.0% CTR</div>
+          </div>
+          <div class="funnel-step-box">
+            <div class="funnel-step-num">Step 3: Inbound Leads</div>
+            <div class="funnel-step-val" id="funnelValLeads">0</div>
+            <div class="funnel-step-sub" id="funnelSubLeads">0.0% Lead CvR</div>
+          </div>
+          <div class="funnel-step-box">
+            <div class="funnel-step-num">Step 4: Confirmed Booked</div>
+            <div class="funnel-step-val" id="funnelValBooked" style="color:#10b981;">0</div>
+            <div class="funnel-step-sub" id="funnelSubBooked">0.0% Book Rate</div>
+          </div>
+          <div class="funnel-step-box">
+            <div class="funnel-step-num">Step 5: Attended Show-Ups</div>
+            <div class="funnel-step-val" id="funnelValAttended" style="color:#0284c7;">0</div>
+            <div class="funnel-step-sub" id="funnelSubAttended">0.0% Show-Up</div>
+          </div>
+          <div class="funnel-step-box" style="background:#f5f3ff; border-color:#c4b5fd;">
+            <div class="funnel-step-num" style="color:#6d28d9;">Step 6: Surgeries Done</div>
+            <div class="funnel-step-val" id="funnelValSurgeries" style="color:#6d28d9;">0</div>
+            <div class="funnel-step-sub" id="funnelSubSurgeries" style="color:#6d28d9;">Procedures Done</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Regional & Speciality Matrix Tables -->
+      <div class="grid-2">
+        <div class="content-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <h3>Territory Performance Comparison (Numerical Scorecard)</h3>
+              <p>AUH, DXB, Northern Emirates, and Sunny Clinics side-by-side</p>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Territory</th>
+                  <th class="cell-numeric">Spend (AED)</th>
+                  <th class="cell-numeric">Avg CPC</th>
+                  <th class="cell-numeric">Leads</th>
+                  <th class="cell-numeric">Booked</th>
+                  <th class="cell-numeric">CPBA</th>
+                  <th class="cell-numeric">Attended</th>
+                  <th class="cell-numeric">Surgeries</th>
+                  <th class="cell-numeric">Top IS</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyRegionalMatrix"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-header-row">
+            <div class="card-title-group">
+              <h3>Clinical Specialities by Patient Bookings & CPBA</h3>
+              <p>Appointment volume & procedure yield across UAE facilities</p>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th class="cell-numeric">Spend</th>
+                  <th class="cell-numeric">Leads</th>
+                  <th class="cell-numeric">Booked</th>
+                  <th class="cell-numeric">CPBA</th>
+                  <th class="cell-numeric">Attended</th>
+                  <th class="cell-numeric">Surgeries</th>
+                </tr>
+              </thead>
+              <tbody id="tbodySpecialityMatrix"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call Center Top Lost Reasons -->
+      <div class="content-card" style="margin-bottom: 1.5rem;">
+        <div class="card-header-row">
+          <div class="card-title-group">
+            <h3>Call Center Inquiry Lost Reasons & Lead Quality Audit</h3>
+            <p>Primary bottlenecks preventing appointments from booking</p>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Lost Reason Category</th>
+                <th class="cell-numeric">Inquiries Count</th>
+                <th class="cell-numeric">Share of Lost Leads</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyCallCenterSummary"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==========================================================================
+         TAB 2: Granular Tabular Master Grid (No Revenue)
+         ========================================================================== -->
+    <div id="view-tabular" class="tab-view-content" style="display:none;">
+
+      <div class="section-divider-title" style="margin-top: 0.25rem;">
+        <div>
+          <h2>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            Granular Tabular Master Grid (Exhaustive Discrete Columns)
+          </h2>
+          <p>Full-width granular keyword data with frozen left columns, discrete campaign & ad group cells, and automated Next Steps</p>
+        </div>
+
+        <!-- View Level Selector -->
+        <div style="display:flex; gap:0.35rem; background:#e2e8f0; padding:2px; border-radius:6px;">
+          <button class="date-preset-btn view-level-btn active" data-level="keyword">Keyword Level</button>
+          <button class="date-preset-btn view-level-btn" data-level="campaign">Campaign Level</button>
+          <button class="date-preset-btn view-level-btn" data-level="branch">Hospital Facility Level</button>
+          <button class="date-preset-btn view-level-btn" data-level="department">Speciality Level</button>
+        </div>
+      </div>
+
+      <!-- Next Steps Quick Filter Pills -->
+      <div class="next-step-pills-bar">
+        <span style="font-size:0.75rem; font-weight:800; text-transform:uppercase; color:#64748b; margin-right:0.35rem;">Filter Action Directives:</span>
+        <button class="step-pill active" data-step="ALL">
+          <span>All Directives</span> <span id="pill-count-ALL">(0)</span>
+        </button>
+        <button class="step-pill" data-step="SCALE">
+          <span style="color:#15803d;">🚀 Scale Budget (+25%)</span> <span id="pill-count-SCALE">(0)</span>
+        </button>
+        <button class="step-pill" data-step="BID_UP">
+          <span style="color:#0369a1;">📈 Boost Max CPC (+15%)</span> <span id="pill-count-BID_UP">(0)</span>
+        </button>
+        <button class="step-pill" data-step="BID_DOWN">
+          <span style="color:#b45309;">📉 Lower Max CPC (-20%)</span> <span id="pill-count-BID_DOWN">(0)</span>
+        </button>
+        <button class="step-pill" data-step="PAUSE">
+          <span style="color:#b91c1c;">🛑 Pause Broad & Negative</span> <span id="pill-count-PAUSE">(0)</span>
+        </button>
+        <button class="step-pill" data-step="LANDING_PAGE">
+          <span style="color:#c2410c;">⚡ Fix Landing Page & QS</span> <span id="pill-count-LANDING_PAGE">(0)</span>
+        </button>
+      </div>
+
+      <!-- Freezed Sticky Master Table (Discrete Non-Overlapping Columns, No Revenue) -->
+      <div class="table-freeze-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <!-- Freezed Left Columns -->
+              <th class="sticky-col-1" style="min-width: 250px;">Search Keyword / Term</th>
+              <th class="sticky-col-2" style="min-width: 220px;">Hospital Facility</th>
+              
+              <!-- Core Clinical & Optimization Columns -->
+              <th style="min-width: 170px;">Department</th>
+              <th style="min-width: 300px; background: #0f172a; color: #38bdf8;">Next Step Optimization Directive</th>
+              <th style="min-width: 260px;">Campaign Name</th>
+              <th style="min-width: 200px;">Ad Group Name</th>
+              
+              <!-- Traffic Metrics -->
+              <th class="cell-numeric">Impr.</th>
+              <th class="cell-numeric">Clicks</th>
+              <th class="cell-numeric">Avg CPC</th>
+              <th class="cell-numeric">Spend (AED)</th>
+              
+              <!-- Conversions & CPA -->
+              <th class="cell-numeric">Conv.</th>
+              <th class="cell-numeric">CvR %</th>
+              <th class="cell-numeric">CPA (AED)</th>
+              
+              <!-- Impression Share & Top of Page Rates -->
+              <th class="cell-numeric" style="color: #38bdf8;">Search Top IS</th>
+              <th class="cell-numeric">Search Abs Top</th>
+              <th class="cell-numeric" style="color: #f87171;">Lost IS (Rank)</th>
+              <th class="cell-numeric" style="color: #fbbf24;">Lost IS (Budget)</th>
+              
+              <!-- Call Center Patient Bookings & Outcomes -->
+              <th class="cell-numeric" style="color: #4ade80;">Booked Appts</th>
+              <th class="cell-numeric" style="color: #38bdf8;">CPBA (AED)</th>
+              <th class="cell-numeric">Attended Show-Ups</th>
+              <th class="cell-numeric" style="color: #c084fc;">Surgeries</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyExhaustiveAds"></tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ==========================================================================
+         TAB 3: AI Marketing Copilot (Chatbot Full Tab)
+         ========================================================================== -->
+    <div id="view-chatbot" class="tab-view-content" style="display:none;">
+      <div class="chatbot-wrapper">
+        <div class="chatbot-header">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="background:#00a896; width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:1.1rem;">AI</div>
+            <div>
+              <h3 style="font-size:1.1rem; font-weight:700; color:#ffffff;">NMC Performance Marketing Copilot</h3>
+              <p style="font-size:0.78rem; color:#94a3b8;">Real-time natural-language intelligence on campaigns, doctor bookings, and CPBA</p>
+            </div>
+          </div>
+          <button class="btn-header" style="font-size:0.75rem;" onclick="NMC_CHATBOT.chatHistory=[]; NMC_CHATBOT.init(); APP.renderChatbot(); APP.renderFloatingChat();">Clear Chat History</button>
+        </div>
+
+        <div id="chatMessagesContainer" class="chatbot-messages-container"></div>
+
+        <!-- Prompt Suggestions Chips -->
+        <div class="chat-prompt-chips">
+          <button class="chip-btn" data-query="Which clinical specialities have the highest confirmed bookings and lowest CPBA?">🏆 Top Specialities by Bookings</button>
+          <button class="chip-btn" data-query="How is Sunny Clinics performing in Samnan?">🏥 Sunny Clinics in Samnan</button>
+          <button class="chip-btn" data-query="What are our next steps to cut CPC by 25%?">🎯 How to Cut CPC</button>
+          <button class="chip-btn" data-query="What is our call center show-up rate and lost reasons?">📞 Call Center & Show-Up Rate</button>
+          <button class="chip-btn" data-query="Show Abu Dhabi (AUH) regional performance">📍 Abu Dhabi Performance</button>
+          <button class="chip-btn" data-query="Which campaigns should we scale right now?">🚀 Campaigns to Scale</button>
+        </div>
+
+        <div class="chatbot-input-bar">
+          <input type="text" id="chatbotInput" class="chatbot-input" placeholder="Ask anything (e.g. 'Which hospital has highest bookings?', 'Show Quality Score waste', 'How is Samnan clinic doing?')...">
+          <button id="btnSendChat" class="btn-header primary" style="padding:0.75rem 1.5rem; font-size:0.9rem;">
+            Ask AI Copilot
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         TAB 4: Master Google Sheet Setup & Automated In-Sheet Sync Button
+         ========================================================================== -->
+    <div id="view-googlesheets" class="tab-view-content" style="display:none;">
+      
+      <!-- Top Action Card: 1-Click Master Spreadsheet & Google Sheets Creator -->
+      <div class="content-card" style="margin-bottom: 1.5rem; border: 2px solid #107c41; background: #ffffff;">
+        <div class="card-header-row" style="margin-bottom: 1rem;">
+          <div class="card-title-group">
+            <div style="display:flex; align-items:center; gap:0.6rem;">
+              <span style="font-size:1.6rem;">📊</span>
+              <h3 style="color:#107c41; font-size:1.3rem;">Official NMC Google Sheet Master Integration Hub</h3>
+            </div>
+            <p style="font-size:0.85rem; color:#475569; margin-top:3px;">
+              Pre-configured with Tab 1 (<code>Google_Ads_Data</code>), Tab 2 (<code>Call_Center_Leads</code> with your 14 columns), and in-sheet Sync macros.
+            </p>
+          </div>
+          
+          <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+            <!-- OPEN REAL GOOGLE SHEET ON DOCS.GOOGLE.COM -->
+            <a href="https://docs.google.com/spreadsheets/d/1WUlm0LJIHWykInkXuCyOmbeCFsEC2TF_RGChRGoXEt8/edit?gid=0#gid=0" target="_blank" class="btn-header sheets-btn" style="padding:0.75rem 1.4rem; font-size:0.95rem; font-weight:800; box-shadow:0 3px 12px rgba(16,124,65,0.4);">
+              🚀 1. Open Official Google Sheet (docs.google.com)
+            </a>
+
+            <!-- Download Pre-Built .XLSX File -->
+            <a href="NMC_Hospital_Master_Template.xlsx" download="NMC_Hospital_Master_Template.xlsx" class="btn-header" style="background:#0b2545; color:#fff; font-weight:700; padding:0.75rem 1.25rem;">
+              📥 2. Download Excel Template (.xlsx)
+            </a>
+
+            <!-- Open Blank Google Sheet via sheets.new -->
+            <a href="https://sheets.new" target="_blank" class="btn-header" style="background:#028090; color:#fff; font-weight:700; padding:0.75rem 1.25rem;">
+              📂 3. Open sheets.new
+            </a>
+          </div>
+        </div>
+
+        <!-- 3-Step Simple Setup Instructions -->
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; margin-bottom:1.5rem;">
+          
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1.25rem;">
+            <div style="font-family:var(--font-heading); font-weight:800; font-size:1.05rem; color:#028090; margin-bottom:0.4rem;">
+              Step 1: Open Master Sheet
+            </div>
+            <p style="font-size:0.82rem; color:#475569; line-height:1.5;">
+              Download the <strong><code>NMC_Hospital_Master_Template.xlsx</code></strong> above and open it in Google Sheets (or upload to Google Drive). Both tabs (<code>Google_Ads_Data</code> and <code>Call_Center_Leads</code>) are pre-formatted.
+            </p>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1.25rem;">
+            <div style="font-family:var(--font-heading); font-weight:800; font-size:1.05rem; color:#00a896; margin-bottom:0.4rem;">
+              Step 2: Add In-Sheet Sync Button
+            </div>
+            <p style="font-size:0.82rem; color:#475569; line-height:1.5;">
+              In your Google Sheet, go to <strong>Extensions > Apps Script</strong>. Paste the 1-click sync script below. A <strong><code>🚀 NMC Sync</code></strong> button will appear directly inside your Google Sheet!
+            </p>
+          </div>
+
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:1.25rem;">
+            <div style="font-family:var(--font-heading); font-weight:800; font-size:1.05rem; color:#10b981; margin-bottom:0.4rem;">
+              Step 3: Paste Data & Click Sync
+            </div>
+            <p style="font-size:0.82rem; color:#475569; line-height:1.5;">
+              Whenever you paste new Google Ads or Call Center leads into your Google Sheet, just click <strong><code>🚀 NMC Sync > 🔄 Sync Data to Dashboard</code></strong> directly on the Google Sheet.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- In-Sheet Sync Button Google Apps Script Code -->
+        <div style="background:#0b2545; color:#f8fafc; border-radius:12px; padding:1.25rem 1.5rem; margin-bottom:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <div>
+              <span style="font-family:var(--font-heading); font-weight:800; font-size:1rem; color:#38bdf8;">
+                💻 1-Click Google Sheet Auto-Setup & Sync Script:
+              </span>
+              <p style="font-size:0.76rem; color:#94a3b8;">
+                Paste into <strong>Extensions > Apps Script</strong> on your Google Sheet, then click <strong>Run</strong> on <code>setupAllTabsAndColumns</code> to auto-build both tabs with all 27+14 columns!
+              </p>
+            </div>
+            <button class="btn-header" style="background:#00a896; border-color:#00a896; color:#ffffff; font-weight:700; padding:0.45rem 1rem;" onclick="navigator.clipboard.writeText(`function onOpen() {
+  SpreadsheetApp.getUi().createMenu('🚀 NMC Sync')
+    .addItem('✨ 1. Setup All Tabs & Columns', 'setupAllTabsAndColumns')
+    .addItem('🔄 2. Sync Data to Dashboard', 'syncDataToDashboard')
+    .addToUi();
+}
+
+function setupAllTabsAndColumns() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // Rename Google Spreadsheet Title
+  try { ss.rename('NMC Healthcare (UAE) — Master Marketing & Call Center CRM Data'); } catch(e){}
+
+  // Tab 1: Google_Ads_Data (27 Columns)
+  let adsSheet = ss.getSheetByName('Google_Ads_Data') || ss.insertSheet('Google_Ads_Data', 0);
+  const adsHeaders = [
+    'Date', 'Campaign_Name', 'Ad_Account', 'Ad_Group_Name', 'Keyword', 'Match_Type',
+    'Quality_Score', 'Expected_CTR', 'Ad_Relevance', 'Landing_Page_Exp',
+    'Impressions', 'Clicks', 'CTR', 'Avg_CPC', 'Cost', 'Conversions', 'Cost_Per_Conv', 'Conv_Rate',
+    'Search_Impr_Share', 'Search_Top_IS', 'Search_Abs_Top_IS', 'Search_Lost_IS_Budget', 'Search_Lost_IS_Rank',
+    'Campaign_Type', 'Campaign_Status', 'Device', 'Phone_Calls'
+  ];
+  adsSheet.getRange(1, 1, 1, adsHeaders.length).setValues([adsHeaders]);
+  adsSheet.getRange(1, 1, 1, adsHeaders.length).setBackground('#0b2545').setFontColor('#ffffff').setFontWeight('bold');
+  adsSheet.setFrozenRows(1);
+
+  // Tab 2: Call_Center_Leads (Your 14 CRM Columns)
+  let leadsSheet = ss.getSheetByName('Call_Center_Leads') || ss.insertSheet('Call_Center_Leads', 1);
+  const leadsHeaders = [
+    'ID', 'Status', 'Patient', 'Phone', 'Email', 'Doctor', 'Branch', 'Department',
+    'Lead priority', 'Appointment Date', 'Appointment Time', 'Handled By', 'Response Time', 'Created At'
+  ];
+  leadsSheet.getRange(1, 1, 1, leadsHeaders.length).setValues([leadsHeaders]);
+  leadsSheet.getRange(1, 1, 1, leadsHeaders.length).setBackground('#00a896').setFontColor('#ffffff').setFontWeight('bold');
+  leadsSheet.setFrozenRows(1);
+
+  // Delete extra empty Sheet1
+  const defaultSheet = ss.getSheetByName('Sheet1');
+  if (defaultSheet && ss.getSheets().length > 1) { try { ss.deleteSheet(defaultSheet); } catch(e){} }
+
+  SpreadsheetApp.getUi().alert('🎉 Setup Complete!\n\n• Spreadsheet Renamed\n• Tab 1: Google_Ads_Data (27 cols)\n• Tab 2: Call_Center_Leads (14 cols)\n• Ready for Sync!');
+}
+
+function syncDataToDashboard() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const adsSheet = ss.getSheetByName('Google_Ads_Data');
+  const leadsSheet = ss.getSheetByName('Call_Center_Leads');
+  if (!adsSheet || !leadsSheet) {
+    return SpreadsheetApp.getUi().alert('Error: Run setupAllTabsAndColumns first.');
+  }
+  const adsData = adsSheet.getDataRange().getValues();
+  const leadsData = leadsSheet.getDataRange().getValues();
+  SpreadsheetApp.getUi().alert('✅ Verified ' + (adsData.length - 1) + ' Ads rows and ' + (leadsData.length - 1) + ' Leads ready for NMC Dashboard!');
+}`); alert('Copied 1-Click Auto-Setup & Sync Script to Clipboard!');">
+              📋 Copy Full Setup Script
+            </button>
+          </div>
+
+          <pre style="background:#061527; padding:1rem; border-radius:8px; font-family:var(--font-mono); font-size:0.78rem; color:#e2e8f0; overflow-x:auto; line-height:1.45;">
+function onOpen() {
+  SpreadsheetApp.getUi().createMenu('🚀 NMC Sync')
+    .addItem('✨ 1. Setup All Tabs & Columns', 'setupAllTabsAndColumns')
+    .addItem('🔄 2. Sync Data to Dashboard', 'syncDataToDashboard')
+    .addToUi();
+}
+
+function setupAllTabsAndColumns() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  // Tab 1: Google_Ads_Data (27 Columns)
+  let adsSheet = ss.getSheetByName('Google_Ads_Data') || ss.insertSheet('Google_Ads_Data', 0);
+  const adsHeaders = ['Date','Campaign_Name','Ad_Account','Ad_Group_Name','Keyword','Match_Type','Quality_Score','Expected_CTR','Ad_Relevance','Landing_Page_Exp','Impressions','Clicks','CTR','Avg_CPC','Cost','Conversions','Cost_Per_Conv','Conv_Rate','Search_Impr_Share','Search_Top_IS','Search_Abs_Top_IS','Search_Lost_IS_Budget','Search_Lost_IS_Rank','Campaign_Type','Campaign_Status','Device','Phone_Calls'];
+  adsSheet.getRange(1, 1, 1, adsHeaders.length).setValues([adsHeaders]).setBackground('#0b2545').setFontColor('#ffffff').setFontWeight('bold');
+  adsSheet.setFrozenRows(1);
+
+  // Tab 2: Call_Center_Leads (Your 14 CRM Columns)
+  let leadsSheet = ss.getSheetByName('Call_Center_Leads') || ss.insertSheet('Call_Center_Leads', 1);
+  const leadsHeaders = ['ID','Status','Patient','Phone','Email','Doctor','Branch','Department','Lead priority','Appointment Date','Appointment Time','Handled By','Response Time','Created At'];
+  leadsSheet.getRange(1, 1, 1, leadsHeaders.length).setValues([leadsHeaders]).setBackground('#00a896').setFontColor('#ffffff').setFontWeight('bold');
+  leadsSheet.setFrozenRows(1);
+}</pre>
+        </div>
+
+        <!-- Real Google Sheet (docs.google.com) Live URL Connector -->
+        <div style="background:#f0fdf4; border:2px solid #86efac; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+            <div>
+              <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span style="font-size:1.4rem;">🌐</span>
+                <h4 style="color:#166534; font-weight:800; font-size:1.1rem; margin:0;">
+                  Live Google Sheet (docs.google.com) Direct Streaming Connector
+                </h4>
+              </div>
+              <p style="font-size:0.84rem; color:#15803d; margin-top:4px;">
+                Connect any real Google Sheet hosted on <code>docs.google.com/spreadsheets/d/...</code>. The dashboard will directly stream live rows from both tabs (<code>Google_Ads_Data</code> and <code>Call_Center_Leads</code>)!
+              </p>
+            </div>
+            <a href="https://sheets.new" target="_blank" class="btn-header" style="background:#166534; color:#ffffff; font-weight:700; padding:0.5rem 1rem; font-size:0.82rem;">
+              ➕ Open sheets.new
+            </a>
+          </div>
+
+          <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:0.75rem;">
+            <input type="text" id="inputSheetUrl" class="filter-input" style="flex:1; min-width:320px; font-family:var(--font-mono); font-size:0.84rem; padding:0.65rem 0.85rem; border:1.5px solid #86efac;" value="https://docs.google.com/spreadsheets/d/1WUlm0LJIHWykInkXuCyOmbeCFsEC2TF_RGChRGoXEt8/edit?gid=0#gid=0" placeholder="https://docs.google.com/spreadsheets/d/1WUlm0LJIHWykInkXuCyOmbeCFsEC2TF_RGChRGoXEt8/edit?gid=0#gid=0">
+            <button id="btnSyncSheetUrl" class="btn-header sheets-btn" style="padding:0.65rem 1.4rem; font-weight:800; font-size:0.88rem; box-shadow:0 3px 10px rgba(16,124,65,0.3);">
+              🔗 Connect & Stream Real Google Sheet
+            </button>
+          </div>
+
+          <div style="font-size:0.76rem; color:#166534; margin-top:0.6rem;">
+            💡 <em>Setup Requirement: Ensure your Google Sheet is set to <strong>"Anyone with the link can view"</strong> (File > Share > Anyone with link).</em>
+          </div>
+        </div>
+
+        <!-- Embedded Interactive Google Sheet App -->
+        <div style="margin-top:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+            <div>
+              <h4 style="font-size:1.1rem; color:#0b2545; font-weight:800;">
+                📊 Fast In-Dashboard Spreadsheet Workspace:
+              </h4>
+              <p style="font-size:0.78rem; color:#64748b;">
+                Switch between tabs below, paste up to 1 Lakh rows, and click <strong>"SYNC DATA TO DASHBOARD"</strong>.
+              </p>
+            </div>
+            <a href="sheet.html" target="_blank" class="btn-header sheets-btn" style="font-size:0.8rem; padding:0.45rem 1rem;">
+              ↗ Open in Full Screen Tab
+            </a>
+          </div>
+          <iframe src="sheet.html" style="width:100%; height:620px; border:2px solid #cbd5e1; border-radius:12px; box-shadow:var(--shadow-card);"></iframe>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       ALWAYS-VISIBLE FLOATING AI MARKETING COPILOT WIDGET
+       ========================================================================== -->
+  <div class="floating-copilot-container">
+    
+    <!-- Proactive Greeting Callout Bubble -->
+    <div id="copilotCalloutBubble" class="copilot-callout-bubble">
+      <button class="copilot-callout-close" onclick="document.getElementById('copilotCalloutBubble').style.display='none';">&times;</button>
+      <div>🤖 <strong>Need Marketing Intelligence?</strong></div>
+      <div style="font-size:0.78rem; color:#475569; font-weight:500;">Ask me about hospital bookings, top specialities, Sunny Clinics in Samnan, or how to cut CPC!</div>
+      <button class="copilot-callout-btn" onclick="APP.toggleFloatingChat()">Open AI Copilot</button>
+    </div>
+
+    <!-- Floating Interactive Chat Window Popup -->
+    <div id="floatingChatWindow" class="floating-chat-window">
+      <div class="floating-chat-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <div style="background:#00a896; width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; color:#fff;">AI</div>
+          <div>
+            <div style="font-weight:700; font-size:0.92rem; color:#fff;">NMC Marketing Copilot</div>
+            <div style="font-size:0.7rem; color:#94a3b8;">Real-Time Performance Intelligence</div>
+          </div>
+        </div>
+        <button style="background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer;" onclick="APP.toggleFloatingChat()">&times;</button>
+      </div>
+
+      <!-- Quick Prompt Chips in Floating Widget -->
+      <div style="display:flex; gap:0.35rem; padding:0.5rem 0.75rem; background:#fff; border-bottom:1px solid #e2e8f0; overflow-x:auto;">
+        <button class="chip-btn" data-query="Which clinical specialities have the highest confirmed bookings and lowest CPBA?">🏆 Top Bookings</button>
+        <button class="chip-btn" data-query="How is Sunny Clinics performing in Samnan?">🏥 Samnan</button>
+        <button class="chip-btn" data-query="What are our next steps to cut CPC by 25%?">🎯 Cut CPC</button>
+      </div>
+
+      <div id="floatingChatBody" class="floating-chat-body"></div>
+
+      <div class="floating-chat-footer">
+        <input type="text" id="floatChatbotInput" class="chatbot-input" style="padding:0.55rem 0.85rem; font-size:0.84rem;" placeholder="Ask anything about campaigns, doctors, CPBA...">
+        <button id="btnFloatSendChat" class="btn-header primary" style="padding:0.55rem 0.95rem; font-size:0.8rem;">
+          Ask
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Floating AI Launcher Pill -->
+    <button class="floating-copilot-btn" onclick="APP.toggleFloatingChat()">
+      <span class="copilot-pulse-dot"></span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <span>Ask AI Marketing Copilot</span>
+    </button>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 1: Granular Row Drilldown Inspector
+       ========================================================================== -->
+  <div id="modalInspector" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 1000px;">
+      <div class="modal-header">
+        <div>
+          <h2 id="inspectTitle" style="font-size:1.25rem; color:#0b2545;">Keyword Inspector</h2>
+          <p id="inspectSubtitle" style="font-size:0.8rem; color:#64748b; margin-top:2px;">Facility • Department</p>
+        </div>
+        <button class="modal-close">&times;</button>
+      </div>
+
+      <!-- Action Directive Banner -->
+      <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:1rem; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div id="inspectActionBadge" style="margin-bottom:0.25rem;"></div>
+          <div id="inspectDirective" style="font-size:0.85rem; color:#0369a1; font-weight:600;"></div>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="kpi-ribbon" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom:1.25rem;">
+        <div class="kpi-card" style="padding:0.75rem 1rem;">
+          <div class="kpi-title" style="font-size:0.7rem;">Quality Score</div>
+          <div class="kpi-value" id="inspectQS" style="font-size:1.2rem; color:#00a896;">8/10</div>
+        </div>
+        <div class="kpi-card" style="padding:0.75rem 1rem;">
+          <div class="kpi-title" style="font-size:0.7rem;">Spend</div>
+          <div class="kpi-value" id="inspectSpend" style="font-size:1.2rem;">AED 0</div>
+        </div>
+        <div class="kpi-card" style="padding:0.75rem 1rem;">
+          <div class="kpi-title" style="font-size:0.7rem;">Google Conv</div>
+          <div class="kpi-value" id="inspectConv" style="font-size:1.2rem;">0</div>
+        </div>
+        <div class="kpi-card" style="padding:0.75rem 1rem;">
+          <div class="kpi-title" style="font-size:0.7rem;">Booked Appts</div>
+          <div class="kpi-value" id="inspectBooked" style="font-size:1.2rem; color:#10b981;">0</div>
+        </div>
+        <div class="kpi-card" style="padding:0.75rem 1rem;">
+          <div class="kpi-title" style="font-size:0.7rem;">CPBA</div>
+          <div class="kpi-value" id="inspectCPBA" style="font-size:1.2rem; color:#0284c7;">AED 0.00</div>
+        </div>
+        <div class="kpi-card" style="padding:0.75rem 1rem;">
+          <div class="kpi-title" style="font-size:0.7rem;">Attended Show-Ups</div>
+          <div class="kpi-value" id="inspectAttended" style="font-size:1.2rem; color:#0b2545;">0</div>
+        </div>
+      </div>
+
+      <!-- QS Components Breakdown -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1rem; margin-bottom:1.25rem;">
+        <h4 style="font-size:0.85rem; color:#0b2545; margin-bottom:0.6rem; font-weight:700;">Google Ads Quality Score Diagnostics:</h4>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.75rem; font-size:0.8rem;">
+          <div>Expected CTR: <strong id="inspectExpCtr">Average</strong></div>
+          <div>Ad Relevance: <strong id="inspectAdRel">Above average</strong></div>
+          <div>Landing Page Experience: <strong id="inspectLpExp">Above average</strong></div>
+        </div>
+      </div>
+
+      <!-- Matched Call Center Leads -->
+      <h4 style="font-size:0.9rem; color:#0b2545; margin-bottom:0.6rem; font-weight:700;">Matched Call Center Patient Inquiries:</h4>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Lead ID</th>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Status</th>
+              <th>Appointment Slot</th>
+              <th>Response Time</th>
+              <th>Lost Reason</th>
+            </tr>
+          </thead>
+          <tbody id="inspectLeadsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: Campaign Name Semantic Parser Live Tester
+       ========================================================================== -->
+  <div id="modalParser" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2>Campaign Name Semantic Parser Live Tester</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+        Test how the system automatically extracts <strong>Ad Account / Territory</strong>, <strong>Hospital / Clinic Branch</strong>, and <strong>Clinical Speciality</strong> directly from raw campaign names like <code>Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun</code>.
+      </p>
+
+      <div style="margin-bottom: 1.25rem;">
+        <label style="font-size: 0.75rem; font-weight:700; text-transform:uppercase; color:#64748b; display:block; margin-bottom:0.35rem;">Enter Sample Campaign Name:</label>
+        <input type="text" id="parserTestInput" class="filter-input" style="width:100%; font-size:0.95rem;" value="Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun">
+      </div>
+
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem; flex-wrap:wrap;">
+        <button class="date-preset-btn active" onclick="document.getElementById('parserTestInput').value='Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun'; document.getElementById('btnRunParserTest').click();">Sample Sunny Samnan</button>
+        <button class="date-preset-btn active" onclick="document.getElementById('parserTestInput').value='Alo_NMC_Search_Orthopedics_Specialty_AlNahda_DXB'; document.getElementById('btnRunParserTest').click();">Sample Dubai Ortho</button>
+        <button class="date-preset-btn active" onclick="document.getElementById('parserTestInput').value='Alo_NMC_Search_Cardiology_Royal_Khalifa_AUH'; document.getElementById('btnRunParserTest').click();">Sample Abu Dhabi Cardio</button>
+        <button class="date-preset-btn active" onclick="document.getElementById('parserTestInput').value='Alo_NMC_Search_Cardiology_Royal_Sharjah_SHJ'; document.getElementById('btnRunParserTest').click();">Sample Sharjah Cardio</button>
+      </div>
+
+      <button id="btnRunParserTest" class="btn-header primary" style="width:100%; margin-bottom:1.25rem;">
+        Parse Campaign Name
+      </button>
+
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:1.25rem;">
+        <h4 style="font-size:0.85rem; color:#0b2545; margin-bottom:0.75rem; font-weight:700;">Extraction Output:</h4>
+        <div id="parserResultBox" style="font-size:0.88rem;">
+          <div>Type or click a sample above to test.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="js/parser.js"></script>
+  <script src="js/data-store.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

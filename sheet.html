@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NMC Healthcare (UAE) — Master Google Sheet (1 Lakh+ Rows & Deletion Engine)</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background: #f8fafc;
+      font-family: var(--font-body);
+      color: #0f172a;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Google Sheets Top Menu Bar */
+    .sheet-app-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      z-index: 20;
+    }
+
+    .sheet-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .sheet-logo-icon {
+      background: #107c41;
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .sheet-title-text {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0b2545;
+    }
+
+    .sheet-meta-status {
+      font-size: 0.75rem;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+    }
+
+    /* Toolbar with In-Sheet Sync, Paste & Delete Buttons */
+    .sheet-toolbar {
+      background: #f1f5f9;
+      border-bottom: 1px solid #cbd5e1;
+      padding: 0.5rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .sheet-toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-sync-action {
+      background: linear-gradient(135deg, #107c41 0%, #0b6132 100%);
+      color: #ffffff;
+      border: 1px solid #0b6132;
+      padding: 0.5rem 1.15rem;
+      border-radius: 6px;
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 2px 8px rgba(16, 124, 65, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-sync-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 124, 65, 0.5);
+    }
+
+    .btn-paste-action {
+      background: #028090;
+      color: #ffffff;
+      border: 1px solid #028090;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-family: var(--font-heading);
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-paste-action:hover {
+      background: #006674;
+    }
+
+    .btn-delete-selected {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      padding: 0.5rem 0.95rem;
+      border-radius: 6px;
+      font-family: var(--font-heading);
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete-selected:hover:not(:disabled) {
+      background: #b91c1c;
+      color: #ffffff;
+    }
+
+    .btn-delete-selected:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-tool {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      padding: 0.45rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+    }
+
+    .btn-tool:hover {
+      background: #e2e8f0;
+    }
+
+    /* Search & Pagination Navigation Bar */
+    .sheet-nav-bar {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0.4rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .sheet-search-input {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      width: 260px;
+      outline: none;
+    }
+
+    .sheet-search-input:focus {
+      border-color: #00a896;
+      background: #ffffff;
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+    }
+
+    .page-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0f172a;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      background: #00a896;
+      color: #ffffff;
+      border-color: #00a896;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Grid Area */
+    .sheet-grid-container {
+      flex: 1;
+      overflow: auto;
+      background: #ffffff;
+      position: relative;
+    }
+
+    .grid-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      font-family: var(--font-body);
+    }
+
+    .grid-table th {
+      position: sticky;
+      top: 0;
+      background: #0b2545;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid #334155;
+      text-align: left;
+      white-space: nowrap;
+      font-size: 0.74rem;
+      letter-spacing: 0.03em;
+      z-index: 10;
+    }
+
+    .grid-table th.col-chk, .grid-table td.col-chk {
+      width: 35px;
+      min-width: 35px;
+      text-align: center;
+      background: #1e293b;
+      color: #ffffff;
+    }
+
+    .grid-table td.col-chk {
+      background: #f8fafc;
+      border-right: 1px solid #cbd5e1;
+    }
+
+    .grid-table th.col-action, .grid-table td.col-action {
+      width: 45px;
+      min-width: 45px;
+      text-align: center;
+      background: #1e293b;
+      color: #ffffff;
+    }
+
+    .grid-table td.col-action {
+      background: #ffffff;
+      border-right: 1px solid #cbd5e1;
+    }
+
+    .grid-table th.col-row-idx {
+      background: #1e293b;
+      text-align: center;
+      width: 65px;
+      min-width: 65px;
+      color: #94a3b8;
+    }
+
+    .grid-table td {
+      border: 1px solid #cbd5e1;
+      padding: 0.45rem 0.75rem;
+      color: #0f172a;
+      outline: none;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    .grid-table td.col-row-idx {
+      background: #f1f5f9;
+      color: #64748b;
+      font-weight: 700;
+      text-align: center;
+      user-select: none;
+    }
+
+    .grid-table tr:hover td:not(.col-row-idx):not(.col-chk) {
+      background: #f0fdf4;
+    }
+
+    .grid-table td:focus {
+      background: #ffffff;
+      box-shadow: inset 0 0 0 2px #00a896;
+    }
+
+    .btn-row-del {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-row-del:hover {
+      background: #fee2e2;
+      transform: scale(1.15);
+    }
+
+    /* Bottom Sheet Tab Navigator */
+    .sheet-bottom-tabs {
+      background: #e2e8f0;
+      border-top: 1px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      gap: 0.35rem;
+      height: 44px;
+    }
+
+    .tab-btn {
+      background: #cbd5e1;
+      border: 1px solid #94a3b8;
+      border-bottom: none;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+      border-radius: 6px 6px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.15s ease;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #107c41;
+      border-color: #cbd5e1;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+    }
+
+    .tab-btn .tab-badge {
+      background: rgba(0,0,0,0.08);
+      padding: 0.1rem 0.45rem;
+      border-radius: 10px;
+      font-size: 0.72rem;
+    }
+
+    .tab-btn.active .tab-badge {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .toast-banner {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      background: #107c41;
+      color: #ffffff;
+      padding: 0.85rem 1.25rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="sheet-app-header">
+    <div class="sheet-title-group">
+      <div class="sheet-logo-icon">📊</div>
+      <div>
+        <div class="sheet-title-text">NMC Healthcare (UAE) — Master Google Sheet (1 Lakh+ Rows & Deletion Engine)</div>
+        <div class="sheet-meta-status">
+          <span class="live-indicator"></span> Capacity: 100,000+ Rows Supported • Real-Time Row Deletion Active
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+      <a href="index.html" class="btn-tool" style="background:#0b2545; color:#ffffff; font-weight:700;">
+        ← Back to NMC Dashboard
+      </a>
+      <a href="NMC_Hospital_Master_Template.xlsx" download="NMC_Hospital_Master_Template.xlsx" class="btn-tool sheets-btn" style="background:#107c41; color:#fff; border-color:#107c41;">
+        📥 Download Excel (.xlsx)
+      </a>
+    </div>
+  </header>
+
+  <!-- Spreadsheet Toolbar with In-Sheet Sync, Paste & Delete Buttons -->
+  <div class="sheet-toolbar">
+    <div class="sheet-toolbar-actions">
+      <!-- THE IN-SHEET SYNC BUTTON -->
+      <button class="btn-sync-action" onclick="SHEET_APP.syncToDashboard()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+        🚀 SYNC DATA TO DASHBOARD
+      </button>
+
+      <!-- 1-CLICK PASTE CLIPBOARD BUTTON (Supports 1 Lakh Rows) -->
+      <button class="btn-paste-action" onclick="SHEET_APP.pasteFromClipboard()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+        📋 Paste Up to 1 Lakh Rows
+      </button>
+
+      <!-- DELETE SELECTED ROWS BUTTON -->
+      <button class="btn-delete-selected" id="btnDeleteSelected" onclick="SHEET_APP.deleteSelectedRows()" disabled>
+        🗑️ Delete Selected (<span id="selectedCountSpan">0</span>)
+      </button>
+
+      <button class="btn-tool" onclick="SHEET_APP.addNewRow()">
+        ➕ Add Row
+      </button>
+
+      <!-- 1 LAKH ROWS GENERATOR BUTTON -->
+      <button class="btn-tool" style="background:#f0fdf4; border-color:#86efac; color:#15803d; font-weight:700;" onclick="SHEET_APP.loadOneLakhRows()">
+        ⚡ Load 1 Lakh (100,000) Rows
+      </button>
+
+      <!-- CLEAR ALL DATA BUTTON -->
+      <button class="btn-tool" style="color:#b91c1c; border-color:#fca5a5; background:#fff5f5; font-weight:700;" onclick="SHEET_APP.clearSheetData()">
+        💥 Delete All Rows in Tab
+      </button>
+    </div>
+
+    <div style="font-size:0.8rem; color:#475569; font-weight:600;">
+      Active Tab: <span id="lblActiveTab" style="color:#00a896; font-weight:800;">Google_Ads_Data (27 cols)</span>
+    </div>
+  </div>
+
+  <!-- Search & Navigation Pagination Bar -->
+  <div class="sheet-nav-bar">
+    <div style="display:flex; align-items:center; gap:0.65rem;">
+      <input type="text" id="sheetSearchInput" class="sheet-search-input" placeholder="🔍 Search through 1 Lakh rows..." oninput="SHEET_APP.onSearch(this.value)">
+      <span id="sheetMatchCount" style="font-size:0.78rem; color:#64748b; font-weight:600;"></span>
+    </div>
+
+    <div class="pagination-controls">
+      <span style="color:#64748b; font-weight:600;">Rows per view:</span>
+      <select id="pageSizeSelect" class="sheet-search-input" style="width:95px; padding:0.2rem 0.4rem;" onchange="SHEET_APP.setPageSize(this.value)">
+        <option value="100">100</option>
+        <option value="250" selected>250</option>
+        <option value="500">500</option>
+        <option value="1000">1,000</option>
+        <option value="5000">5,000</option>
+      </select>
+
+      <button class="page-btn" id="btnFirstPage" onclick="SHEET_APP.goToPage(1)">&laquo; First</button>
+      <button class="page-btn" id="btnPrevPage" onclick="SHEET_APP.prevPage()">&lsaquo; Prev</button>
+      <span id="pageIndicator" style="font-weight:700; color:#0b2545; min-width:95px; text-align:center;">Page 1 of 1</span>
+      <button class="page-btn" id="btnNextPage" onclick="SHEET_APP.nextPage()">Next &rsaquo;</button>
+      <button class="page-btn" id="btnLastPage" onclick="SHEET_APP.goToLastPage()">Last &raquo;</button>
+
+      <span style="color:#cbd5e1; margin:0 4px;">|</span>
+      <span style="font-size:0.76rem; color:#64748b;">Jump to Row #:</span>
+      <input type="number" id="jumpToRowInput" style="width:75px; padding:2px 5px; font-size:0.78rem; border:1px solid #cbd5e1; border-radius:4px;" placeholder="e.g. 50000" onkeydown="if(event.key==='Enter') SHEET_APP.jumpToRow(this.value)">
+    </div>
+  </div>
+
+  <!-- Spreadsheet Grid Area -->
+  <div class="sheet-grid-container" id="gridContainer" tabindex="0">
+    <table class="grid-table" id="sheetTable">
+      <thead id="sheetTableHead"></thead>
+      <tbody id="sheetTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Sheet Tabs -->
+  <div class="sheet-bottom-tabs">
+    <button class="tab-btn active" id="tabBtnAds" onclick="SHEET_APP.switchTab('ads')">
+      📄 1. Google_Ads_Data <span class="tab-badge" id="badgeCountAds">0 rows</span>
+    </button>
+    <button class="tab-btn" id="tabBtnLeads" onclick="SHEET_APP.switchTab('leads')">
+      📄 2. Call_Center_Leads <span class="tab-badge" id="badgeCountLeads">0 rows</span>
+    </button>
+  </div>
+
+  <!-- Success Toast -->
+  <div id="toastBanner" class="toast-banner">
+    <span>✅</span>
+    <span id="toastText">Synchronized successfully with NMC Dashboard!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/parser.js"></script>
+  <script src="js/data-store.js"></script>
+  <script src="js/analytics.js"></script>
+
+  <script>
+    const SHEET_APP = {
+      currentTab: 'ads', // 'ads' | 'leads'
+      adsRows: [],
+      leadsRows: [],
+      selectedIndices: new Set(),
+      searchQuery: '',
+      currentPage: 1,
+      pageSize: 250,
+
+      adsHeaders: [
+        'Day', 'Campaign', 'Account', 'Ad group', 'Search keyword', 'Match type',
+        'Quality score', 'Exp. CTR', 'Ad relevance', 'Landing page exp.',
+        'Impressions', 'Clicks', 'CTR', 'Avg. CPC', 'Cost', 'Conversions', 'Cost / conv.', 'Conv. rate',
+        'Search impr. share', 'Search top IS', 'Search abs. top IS', 'Search lost IS (budget)', 'Search lost IS (rank)',
+        'Phone calls'
+      ],
+
+      leadsHeaders: [
+        'ID', 'Status', 'Patient', 'Phone', 'Email', 'Doctor', 'Branch', 'Department',
+        'Lead priority', 'Appointment Date', 'Appointment Time', 'Handled By', 'Response Time', 'Created At'
+      ],
+
+      init() {
+        NMC_DATA_STORE.init();
+        
+        // Load initial data from data store
+        this.adsRows = NMC_DATA_STORE.adsData.map(a => this.adsHeaders.map(h => a[h] !== undefined ? String(a[h]) : ''));
+        this.leadsRows = NMC_DATA_STORE.leadsData.map(l => this.leadsHeaders.map(h => l[h] !== undefined ? String(l[h]) : ''));
+
+        this.renderTable();
+        this.attachGlobalPasteHandler();
+      },
+
+      switchTab(tabKey) {
+        this.currentTab = tabKey;
+        this.currentPage = 1;
+        this.searchQuery = '';
+        this.selectedIndices.clear();
+        this.updateSelectedCount();
+        
+        const sInput = document.getElementById('sheetSearchInput');
+        if (sInput) sInput.value = '';
+
+        document.getElementById('tabBtnAds').classList.toggle('active', tabKey === 'ads');
+        document.getElementById('tabBtnLeads').classList.toggle('active', tabKey === 'leads');
+        
+        const lbl = document.getElementById('lblActiveTab');
+        if (lbl) {
+          lbl.textContent = tabKey === 'ads' ? 'Google_Ads_Data (27 cols)' : 'Call_Center_Leads (14 cols)';
+        }
+
+        this.renderTable();
+      },
+
+      getFilteredRowsWithIndices() {
+        const rows = this.currentTab === 'ads' ? this.adsRows : this.leadsRows;
+        if (!this.searchQuery) {
+          return rows.map((r, idx) => ({ row: r, originalIndex: idx }));
+        }
+        const q = this.searchQuery.toLowerCase();
+        const results = [];
+        for (let i = 0; i < rows.length; i++) {
+          if (rows[i].some(cell => String(cell).toLowerCase().includes(q))) {
+            results.push({ row: rows[i], originalIndex: i });
+          }
+        }
+        return results;
+      },
+
+      renderTable() {
+        const thead = document.getElementById('sheetTableHead');
+        const tbody = document.getElementById('sheetTableBody');
+        const headers = this.currentTab === 'ads' ? this.adsHeaders : this.leadsHeaders;
+        const allRows = this.currentTab === 'ads' ? this.adsRows : this.leadsRows;
+        const filteredIndexed = this.getFilteredRowsWithIndices();
+
+        // Update counts
+        const countAds = document.getElementById('badgeCountAds');
+        const countLeads = document.getElementById('badgeCountLeads');
+        const matchCount = document.getElementById('sheetMatchCount');
+        if (countAds) countAds.textContent = `${this.adsRows.length.toLocaleString()} rows`;
+        if (countLeads) countLeads.textContent = `${this.leadsRows.length.toLocaleString()} rows`;
+        if (matchCount) {
+          matchCount.textContent = this.searchQuery ? `Matching ${filteredIndexed.length.toLocaleString()} of ${allRows.length.toLocaleString()} rows` : `Total Capacity: ${allRows.length.toLocaleString()} rows`;
+        }
+
+        // Pagination
+        const totalPages = Math.max(1, Math.ceil(filteredIndexed.length / this.pageSize));
+        if (this.currentPage > totalPages) this.currentPage = totalPages;
+
+        const pageIndicator = document.getElementById('pageIndicator');
+        const btnFirst = document.getElementById('btnFirstPage');
+        const btnPrev = document.getElementById('btnPrevPage');
+        const btnNext = document.getElementById('btnNextPage');
+        const btnLast = document.getElementById('btnLastPage');
+
+        if (pageIndicator) pageIndicator.textContent = `Page ${this.currentPage.toLocaleString()} of ${totalPages.toLocaleString()}`;
+        if (btnFirst) btnFirst.disabled = this.currentPage <= 1;
+        if (btnPrev) btnPrev.disabled = this.currentPage <= 1;
+        if (btnNext) btnNext.disabled = this.currentPage >= totalPages;
+        if (btnLast) btnLast.disabled = this.currentPage >= totalPages;
+
+        const startIdx = (this.currentPage - 1) * this.pageSize;
+        const endIdx = startIdx + this.pageSize;
+        const pageItems = filteredIndexed.slice(startIdx, endIdx);
+
+        const isAllSelected = pageItems.length > 0 && pageItems.every(item => this.selectedIndices.has(item.originalIndex));
+
+        // Render Header with Checkbox & Delete Column
+        thead.innerHTML = `
+          <tr>
+            <th class="col-chk">
+              <input type="checkbox" onchange="SHEET_APP.toggleSelectAll(this.checked)" ${isAllSelected ? 'checked' : ''} title="Select All on Page">
+            </th>
+            <th class="col-action" title="Delete Row">🗑️</th>
+            <th class="col-row-idx">Row #</th>
+            ${headers.map(h => `<th>${h}</th>`).join('')}
+          </tr>
+        `;
+
+        // Render Rows with Checkboxes & Direct Row Delete Button
+        tbody.innerHTML = pageItems.map((item) => {
+          const globalIdx = item.originalIndex;
+          const isChecked = this.selectedIndices.has(globalIdx);
+          return `
+            <tr>
+              <td class="col-chk">
+                <input type="checkbox" onchange="SHEET_APP.toggleRowSelect(${globalIdx}, this.checked)" ${isChecked ? 'checked' : ''}>
+              </td>
+              <td class="col-action">
+                <button class="btn-row-del" onclick="SHEET_APP.deleteSingleRow(${globalIdx})" title="Delete this row">🗑️</button>
+              </td>
+              <td class="col-row-idx">${(globalIdx + 1).toLocaleString()}</td>
+              ${headers.map((_, cIdx) => `
+                <td contenteditable="true" onblur="SHEET_APP.updateCell(${globalIdx}, ${cIdx}, this.innerText)">
+                  ${item.row[cIdx] !== undefined ? item.row[cIdx] : ''}
+                </td>
+              `).join('')}
+            </tr>
+          `;
+        }).join('');
+      },
+
+      updateCell(rowIdx, colIdx, val) {
+        if (this.currentTab === 'ads') {
+          if (this.adsRows[rowIdx]) this.adsRows[rowIdx][colIdx] = val.trim();
+        } else {
+          if (this.leadsRows[rowIdx]) this.leadsRows[rowIdx][colIdx] = val.trim();
+        }
+      },
+
+      toggleRowSelect(globalIdx, checked) {
+        if (checked) {
+          this.selectedIndices.add(globalIdx);
+        } else {
+          this.selectedIndices.delete(globalIdx);
+        }
+        this.updateSelectedCount();
+      },
+
+      toggleSelectAll(checked) {
+        const filteredIndexed = this.getFilteredRowsWithIndices();
+        const startIdx = (this.currentPage - 1) * this.pageSize;
+        const endIdx = startIdx + this.pageSize;
+        const pageItems = filteredIndexed.slice(startIdx, endIdx);
+
+        pageItems.forEach(item => {
+          if (checked) {
+            this.selectedIndices.add(item.originalIndex);
+          } else {
+            this.selectedIndices.delete(item.originalIndex);
+          }
+        });
+
+        this.updateSelectedCount();
+        this.renderTable();
+      },
+
+      updateSelectedCount() {
+        const count = this.selectedIndices.size;
+        const span = document.getElementById('selectedCountSpan');
+        const btn = document.getElementById('btnDeleteSelected');
+        if (span) span.textContent = count.toLocaleString();
+        if (btn) btn.disabled = count === 0;
+      },
+
+      deleteSingleRow(globalIdx) {
+        if (this.currentTab === 'ads') {
+          this.adsRows.splice(globalIdx, 1);
+        } else {
+          this.leadsRows.splice(globalIdx, 1);
+        }
+        this.selectedIndices.delete(globalIdx);
+        this.updateSelectedCount();
+        this.renderTable();
+        this.showToast(`Deleted row #${globalIdx + 1}.`);
+      },
+
+      deleteSelectedRows() {
+        const count = this.selectedIndices.size;
+        if (count === 0) return;
+
+        if (!confirm(`Delete ${count.toLocaleString()} selected rows?`)) return;
+
+        const indicesToDelete = Array.from(this.selectedIndices).sort((a, b) => b - a);
+
+        if (this.currentTab === 'ads') {
+          indicesToDelete.forEach(idx => {
+            if (idx >= 0 && idx < this.adsRows.length) this.adsRows.splice(idx, 1);
+          });
+        } else {
+          indicesToDelete.forEach(idx => {
+            if (idx >= 0 && idx < this.leadsRows.length) this.leadsRows.splice(idx, 1);
+          });
+        }
+
+        this.selectedIndices.clear();
+        this.updateSelectedCount();
+        this.renderTable();
+        this.showToast(`🗑️ Successfully deleted ${count.toLocaleString()} selected rows!`);
+      },
+
+      clearSheetData() {
+        const tabName = this.currentTab === 'ads' ? 'Google_Ads_Data' : 'Call_Center_Leads';
+        if (!confirm(`Are you sure you want to delete ALL rows in ${tabName}?`)) return;
+        
+        if (this.currentTab === 'ads') {
+          this.adsRows = [];
+        } else {
+          this.leadsRows = [];
+        }
+        this.selectedIndices.clear();
+        this.updateSelectedCount();
+        this.currentPage = 1;
+        this.renderTable();
+        this.showToast(`💥 Completely deleted all rows in ${tabName}. Sheet is fresh & ready.`);
+      },
+
+      addNewRow() {
+        const headers = this.currentTab === 'ads' ? this.adsHeaders : this.leadsHeaders;
+        const emptyRow = headers.map(() => '');
+        if (this.currentTab === 'ads') {
+          this.adsRows.unshift(emptyRow);
+        } else {
+          this.leadsRows.unshift(emptyRow);
+        }
+        this.currentPage = 1;
+        this.renderTable();
+        this.showToast('Added new blank row at top of sheet!');
+      },
+
+      onSearch(val) {
+        this.searchQuery = val.trim();
+        this.currentPage = 1;
+        this.renderTable();
+      },
+
+      setPageSize(size) {
+        this.pageSize = parseInt(size, 10) || 250;
+        this.currentPage = 1;
+        this.renderTable();
+      },
+
+      goToPage(p) {
+        this.currentPage = p;
+        this.renderTable();
+      },
+
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+          this.renderTable();
+        }
+      },
+
+      nextPage() {
+        const filteredIndexed = this.getFilteredRowsWithIndices();
+        const totalPages = Math.ceil(filteredIndexed.length / this.pageSize);
+        if (this.currentPage < totalPages) {
+          this.currentPage++;
+          this.renderTable();
+        }
+      },
+
+      goToLastPage() {
+        const filteredIndexed = this.getFilteredRowsWithIndices();
+        this.currentPage = Math.max(1, Math.ceil(filteredIndexed.length / this.pageSize));
+        this.renderTable();
+      },
+
+      jumpToRow(rowNumStr) {
+        const num = parseInt(rowNumStr, 10);
+        const allRows = this.currentTab === 'ads' ? this.adsRows : this.leadsRows;
+        if (!num || num < 1 || num > allRows.length) {
+          return alert(`Please enter a valid row number between 1 and ${allRows.length.toLocaleString()}.`);
+        }
+        this.currentPage = Math.ceil(num / this.pageSize);
+        this.renderTable();
+        this.showToast(`Jumped to Row #${num.toLocaleString()} on Page ${this.currentPage.toLocaleString()}`);
+      },
+
+      /**
+       * Generate 1 Lakh (100,000) Rows Test Dataset
+       */
+      loadOneLakhRows() {
+        this.showToast('⚡ Generating 1 Lakh (100,000) rows across UAE accounts...');
+        
+        setTimeout(() => {
+          const sampleAds = [];
+          const sampleLeads = [];
+
+          const territories = ['AUH', 'DXB', 'Northern Emirates', 'Sunny Clinics'];
+          const hospitals = [
+            'NMC Royal Hospital Khalifa City', 'NMC Specialty Hospital Abu Dhabi', 'NMC Royal Hospital DIP',
+            'NMC Specialty Hospital Al Nahda', 'NMC Royal Hospital Sharjah', 'Sunny Medical Centre Samnan',
+            'Sunny Al Buhaira Medical Centre', 'NMC Bareen International Hospital'
+          ];
+          const deps = ['Cardiology', 'Orthopedics', 'IVF & Fertility', 'Pediatrics', 'Internal Medicine', 'Dermatology & Aesthetics', 'Dental', 'Oncology'];
+          const matchTypes = ['Exact', 'Phrase', 'Broad'];
+
+          for (let i = 1; i <= 50000; i++) {
+            const terr = territories[i % territories.length];
+            const hosp = hospitals[i % hospitals.length];
+            const dep = deps[i % deps.length];
+            const match = matchTypes[i % matchTypes.length];
+            const cost = (150 + (i % 500)).toFixed(2);
+            const clicks = 20 + (i % 100);
+            const conv = 2 + (i % 15);
+
+            sampleAds.push([
+              '2026-08-15', `Alo_NMC_Search_${dep.replace(/[^a-zA-Z]/g, '')}_${terr}_Campaign`, terr, `${dep} - ${match}`,
+              `${dep.toLowerCase()} doctor uae query ${i}`, match, 8, 'Above average', 'Above average', 'Above average',
+              clicks * 10, clicks, '10.0%', (cost / clicks).toFixed(2), cost, conv, (cost / conv).toFixed(2), '15.0%',
+              '85.0%', '82.0%', '55.0%', '8.0%', '6.0%', 'Search', 'Enabled', 'Mobile', Math.round(conv * 0.4)
+            ]);
+
+            sampleLeads.push([
+              `NMC-LD-${100000 + i}`, i % 2 === 0 ? 'Booked' : i % 3 === 0 ? 'Attended' : i % 5 === 0 ? 'Surgery Scheduled' : 'Not Booked',
+              `Patient UAE #${i}`, `+971 50 ${Math.floor(100 + Math.random() * 899)} ${Math.floor(1000 + Math.random() * 8999)}`,
+              `patient${i}@gmail.com`, 'Dr. Sanjay Sharma', hosp, dep, 'High', '2026-08-18', '10:30', 'Fatima Al-Mazrouei', '3 mins', '2026-08-15 10:00'
+            ]);
+          }
+
+          this.adsRows = sampleAds;
+          this.leadsRows = sampleLeads;
+          this.selectedIndices.clear();
+          this.updateSelectedCount();
+          this.currentPage = 1;
+          this.renderTable();
+          this.showToast(`🚀 Successfully loaded 1 Lakh (100,000) total rows! Ready for editing, deleting, and syncing.`);
+        }, 100);
+      },
+
+      /**
+       * Global Clipboard Paste Handler (Supports 100,000+ rows)
+       */
+      attachGlobalPasteHandler() {
+        window.addEventListener('paste', (e) => {
+          const clipboardData = e.clipboardData || window.clipboardData;
+          if (!clipboardData) return;
+          const pastedText = clipboardData.getData('Text');
+          if (pastedText && pastedText.trim().length > 0) {
+            e.preventDefault();
+            this.processPastedData(pastedText);
+          }
+        });
+      },
+
+      async pasteFromClipboard() {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (!text || !text.trim()) {
+            return alert('Clipboard is empty. Copy rows from Google Sheets or Excel first!');
+          }
+          this.processPastedData(text);
+        } catch (err) {
+          const manual = prompt('Paste your copied rows from Google Sheets / Excel below:');
+          if (manual && manual.trim()) {
+            this.processPastedData(manual);
+          }
+        }
+      },
+
+      processPastedData(rawText) {
+        const lines = rawText.trim().split(/\r?\n/);
+        if (lines.length === 0) return;
+
+        const delimiter = (lines[0].match(/\t/g) || []).length >= (lines[0].match(/,/g) || []).length ? '\t' : ',';
+        const parsedRows = [];
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+          const cols = line.split(delimiter).map(c => c.replace(/^["']|["']$/g, '').trim());
+          parsedRows.push(cols);
+        }
+
+        if (parsedRows.length === 0) return;
+
+        // Check if first row is header
+        const firstRowStr = parsedRows[0].join(' ').toLowerCase();
+        let dataRows = parsedRows;
+        if (firstRowStr.includes('campaign') || firstRowStr.includes('keyword') || firstRowStr.includes('status') || firstRowStr.includes('doctor')) {
+          dataRows = parsedRows.slice(1);
+        }
+
+        const headers = this.currentTab === 'ads' ? this.adsHeaders : this.leadsHeaders;
+
+        // Normalize row widths
+        const formatted = dataRows.map(row => {
+          const r = [];
+          for (let i = 0; i < headers.length; i++) {
+            r.push(row[i] !== undefined ? String(row[i]) : '');
+          }
+          return r;
+        });
+
+        if (this.currentTab === 'ads') {
+          this.adsRows = [...formatted, ...this.adsRows];
+        } else {
+          this.leadsRows = [...formatted, ...this.leadsRows];
+        }
+
+        this.currentPage = 1;
+        this.renderTable();
+        this.showToast(`📋 Successfully pasted ${formatted.length.toLocaleString()} rows into ${this.currentTab === 'ads' ? 'Google_Ads_Data' : 'Call_Center_Leads'}! Click "SYNC DATA TO DASHBOARD" to update.`);
+      },
+
+      syncToDashboard() {
+        // Build JSON rows
+        const formattedAds = this.adsRows.map(r => {
+          const obj = {};
+          this.adsHeaders.forEach((h, idx) => obj[h] = r[idx]);
+          return obj;
+        });
+
+        const formattedLeads = this.leadsRows.map(r => {
+          const obj = {};
+          this.leadsHeaders.forEach((h, idx) => obj[h] = r[idx]);
+          return obj;
+        });
+
+        // Ingest into data store
+        NMC_DATA_STORE.ingestAdsData(formattedAds);
+        NMC_DATA_STORE.ingestLeadsData(formattedLeads);
+
+        // Save to localStorage so main dashboard window synchronizes
+        localStorage.setItem('NMC_ADS_DATA_SYNC', JSON.stringify(NMC_DATA_STORE.adsData.slice(0, 10000)));
+        localStorage.setItem('NMC_LEADS_DATA_SYNC', JSON.stringify(NMC_DATA_STORE.leadsData.slice(0, 10000)));
+
+        this.showToast(`🚀 Synchronized ${this.adsRows.length.toLocaleString()} Ads rows and ${this.leadsRows.length.toLocaleString()} Patient Leads to Dashboard!`);
+      },
+
+      showToast(text) {
+        const toast = document.getElementById('toastBanner');
+        const txt = document.getElementById('toastText');
+        if (toast && txt) {
+          txt.textContent = text;
+          toast.style.display = 'flex';
+          setTimeout(() => {
+            toast.style.display = 'none';
+          }, 4000);
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      SHEET_APP.init();
+    });
+  </script>
+</body>
+</html>
