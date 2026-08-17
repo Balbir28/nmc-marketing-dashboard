@@ -31,8 +31,8 @@ const APP = {
     // 2. Initialize Chatbot
     NMC_CHATBOT.init();
 
-    // 3. Set default date preset (Last 30 Days)
-    this.setDatePreset('30d');
+    // 3. Set default date preset (All Time to capture all real data)
+    this.setDatePreset('all');
 
     // 4. Setup Filter Dropdowns
     this.populateFilterDropdowns();
