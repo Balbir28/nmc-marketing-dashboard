@@ -50,6 +50,19 @@ const NMC_DATA_STORE = {
 
   init() {
     this.generateRealisticDataset();
+    setTimeout(() => {
+      this.autoSyncConnectedGoogleSheet();
+    }, 600);
+  },
+
+  async autoSyncConnectedGoogleSheet() {
+    const defaultUrl = 'https://docs.google.com/spreadsheets/d/1WUlm0LJIHWykInkXuCyOmbeCFsEC2TF_RGChRGoXEt8/edit';
+    try {
+      await this.fetchFromRealGoogleSheet(defaultUrl);
+      console.log('Auto-synced live data from connected Google Sheet successfully.');
+    } catch (e) {
+      console.log('Background Google Sheet fetch note:', e.message);
+    }
   },
 
   subscribe(callback) {

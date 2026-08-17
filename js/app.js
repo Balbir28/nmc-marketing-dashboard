@@ -453,20 +453,27 @@ const APP = {
       if (el) el.textContent = val;
     };
 
+    const ctr = m.totalImpressions > 0 ? ((m.totalClicks / m.totalImpressions) * 100).toFixed(1) : '0.0';
+    const convRate = m.totalClicks > 0 ? ((m.totalLeads / m.totalClicks) * 100).toFixed(1) : '0.0';
+    const cpa = m.totalLeads > 0 ? (m.totalSpend / m.totalLeads).toFixed(2) : '0.00';
+
     setVal('kpiSpend', `AED ${Math.round(m.totalSpend).toLocaleString()}`);
+    setVal('kpiAvgCPC', `AED ${m.overallAvgCPC.toFixed(2)}`);
+    setVal('kpiClicks', m.totalClicks.toLocaleString());
+    setVal('kpiImprCtr', `${m.totalImpressions.toLocaleString()} Impr. (${ctr}% CTR)`);
     setVal('kpiLeads', m.totalLeads.toLocaleString());
+    setVal('kpiConvRate', `${convRate}% Conv. Rate`);
+    setVal('kpiCPA', `AED ${cpa}`);
     setVal('kpiBooked', `${m.totalBooked.toLocaleString()} (${m.bookingRate.toFixed(1)}%)`);
     setVal('kpiCPBA', `AED ${m.cpba > 0 ? m.cpba.toFixed(2) : '0.00'}`);
-    setVal('kpiAttended', `${m.totalAttended.toLocaleString()} (${m.attendanceRate.toFixed(1)}%)`);
-    setVal('kpiSurgeries', m.totalSurgeries.toLocaleString());
     setVal('kpiTopIS', `${m.avgTopIS.toFixed(1)}%`);
-    setVal('kpiAvgCPC', `AED ${m.overallAvgCPC.toFixed(2)}`);
     setVal('kpiRespTime', `${m.avgResponseTimeMins} mins`);
   },
 
   renderNumericalFunnel(m) {
     const ctr = m.totalImpressions > 0 ? ((m.totalClicks / m.totalImpressions) * 100).toFixed(1) : 0;
     const cvr = m.totalClicks > 0 ? ((m.totalLeads / m.totalClicks) * 100).toFixed(1) : 0;
+    const cpa = m.totalLeads > 0 ? (m.totalSpend / m.totalLeads).toFixed(2) : '0.00';
 
     const setBox = (idVal, idSub, val, sub) => {
       const elVal = document.getElementById(idVal);
@@ -477,26 +484,27 @@ const APP = {
 
     setBox('funnelValImpr', 'funnelSubImpr', m.totalImpressions.toLocaleString(), '100% Reach');
     setBox('funnelValClicks', 'funnelSubClicks', m.totalClicks.toLocaleString(), `${ctr}% CTR`);
-    setBox('funnelValLeads', 'funnelSubLeads', m.totalLeads.toLocaleString(), `${cvr}% Lead CvR`);
+    setBox('funnelValLeads', 'funnelSubLeads', m.totalLeads.toLocaleString(), `${cvr}% Conv. Rate`);
+    setBox('funnelValCPA', 'funnelSubCPA', `AED ${cpa}`, 'Ad CPA');
     setBox('funnelValBooked', 'funnelSubBooked', m.totalBooked.toLocaleString(), `${m.bookingRate.toFixed(1)}% Book Rate`);
-    setBox('funnelValAttended', 'funnelSubAttended', m.totalAttended.toLocaleString(), `${m.attendanceRate.toFixed(1)}% Show-Up`);
-    setBox('funnelValSurgeries', 'funnelSubSurgeries', m.totalSurgeries.toLocaleString(), 'Procedures Done');
+    setBox('funnelValCPBA', 'funnelSubCPBA', `AED ${m.cpba > 0 ? m.cpba.toFixed(2) : '0.00'}`, 'Cost Per Appt');
   },
 
   renderNumericalRegionalMatrix(regions) {
     const tbody = document.getElementById('tbodyRegionalMatrix');
     if (!tbody) return;
     tbody.innerHTML = regions.map(r => {
+      const cpa = r.totalLeads > 0 ? (r.totalSpend / r.totalLeads).toFixed(2) : '0.00';
       return `
         <tr>
           <td style="font-weight:700; color:#0b2545;">${r.territory}</td>
           <td class="cell-numeric">AED ${Math.round(r.totalSpend).toLocaleString()}</td>
+          <td class="cell-numeric">${r.totalClicks.toLocaleString()}</td>
           <td class="cell-numeric">AED ${r.overallAvgCPC.toFixed(2)}</td>
           <td class="cell-numeric">${r.totalLeads.toLocaleString()}</td>
+          <td class="cell-numeric">AED ${cpa}</td>
           <td class="cell-numeric"><strong>${r.totalBooked}</strong> <span style="font-size:0.75rem; color:#64748b;">(${r.bookingRate.toFixed(1)}%)</span></td>
           <td class="cell-numeric" style="font-weight:700; color:#028090;">AED ${r.cpba > 0 ? r.cpba.toFixed(2) : '0.00'}</td>
-          <td class="cell-numeric"><strong>${r.totalAttended}</strong> <span style="font-size:0.75rem; color:#64748b;">(${r.attendanceRate.toFixed(1)}%)</span></td>
-          <td class="cell-numeric">${r.totalSurgeries}</td>
           <td class="cell-numeric" style="color:#00a896; font-weight:700;">${r.avgTopIS.toFixed(1)}%</td>
         </tr>
       `;
@@ -507,15 +515,18 @@ const APP = {
     const tbody = document.getElementById('tbodySpecialityMatrix');
     if (!tbody) return;
     tbody.innerHTML = departments.slice(0, 8).map(d => {
+      const cpa = d.totalLeads > 0 ? (d.totalSpend / d.totalLeads).toFixed(2) : '0.00';
+      const avgCpc = d.totalClicks > 0 ? (d.totalSpend / d.totalClicks).toFixed(2) : '0.00';
       return `
         <tr>
           <td style="font-weight:700; color:#0b2545;">${d.department}</td>
           <td class="cell-numeric">AED ${Math.round(d.totalSpend).toLocaleString()}</td>
+          <td class="cell-numeric">${d.totalClicks.toLocaleString()}</td>
+          <td class="cell-numeric">AED ${avgCpc}</td>
           <td class="cell-numeric">${d.totalLeads.toLocaleString()}</td>
+          <td class="cell-numeric">AED ${cpa}</td>
           <td class="cell-numeric"><strong>${d.totalBooked}</strong> <span style="font-size:0.75rem; color:#64748b;">(${d.bookingRate.toFixed(1)}%)</span></td>
           <td class="cell-numeric" style="font-weight:700; color:#028090;">AED ${d.cpba > 0 ? d.cpba.toFixed(2) : '0.00'}</td>
-          <td class="cell-numeric">${d.totalAttended}</td>
-          <td class="cell-numeric" style="font-weight:700; color:#10b981;">${d.totalSurgeries}</td>
         </tr>
       `;
     }).join('');
@@ -871,8 +882,6 @@ const APP = {
           <!-- Column 10: Call Center Bookings & Patient Economics -->
           <td class="cell-numeric" style="font-weight:700; color:#047857;">${k.booked}</td>
           <td class="cell-numeric" style="font-weight:700; color:#028090;">AED ${cpba}</td>
-          <td class="cell-numeric">${k.attended}</td>
-          <td class="cell-numeric" style="font-weight:700; color:#6d28d9;">${k.surgeries}</td>
         </tr>
       `;
     }).join('');

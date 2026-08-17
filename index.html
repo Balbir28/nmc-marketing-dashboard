@@ -33,21 +33,12 @@
           📊 Open Connected Google Sheet
         </a>
 
-        <!-- Download Master Sheet Template Button -->
-        <a href="NMC_Hospital_Master_Template.xlsx" download="NMC_Hospital_Master_Template.xlsx" class="btn-header" style="background:rgba(255,255,255,0.15);" title="Download Pre-Formatted Excel/Google Sheet Master Template">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          📥 Download .xlsx
-        </a>
+        <button class="btn-header" style="background:#028090; color:#fff;" onclick="APP.switchMainTab('googlesheets')" title="Configure & Live Sync Google Sheet">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          Live Sync Engine
+        </button>
 
-        <button id="btnOpenParser" class="btn-header" title="Test automated extraction of Hospital Branch and Speciality from Campaign Names">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-          Parser Tester
-        </button>
-        <button class="btn-header" onclick="APP.copyBulkActionPlan()" title="Copy all recommended Next Steps for Google Ads Editor / Bulk Sheet">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-          Copy Next Steps
-        </button>
-        <button class="btn-header" onclick="APP.exportFilteredKeywords()">
+        <button class="btn-header" onclick="APP.exportFilteredKeywords()" title="Export Filtered Keyword Matrix as CSV">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
           Export CSV
         </button>
@@ -213,14 +204,36 @@
           </div>
         </div>
 
+        <div class="kpi-card" style="--card-accent: #0891b2;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Clicks & Reach</span>
+            <span>🖱️</span>
+          </div>
+          <div class="kpi-value" id="kpiClicks">0</div>
+          <div class="kpi-footer">
+            <span id="kpiImprCtr">0 Impr. (0.0% CTR)</span>
+          </div>
+        </div>
+
         <div class="kpi-card" style="--card-accent: #00a896;">
           <div class="kpi-label-group">
-            <span class="kpi-title">Inbound Leads</span>
+            <span class="kpi-title">Inbound Conversions</span>
             <span>📞</span>
           </div>
           <div class="kpi-value" id="kpiLeads">0</div>
           <div class="kpi-footer">
-            <span>Calls + Web Inquiries</span>
+            <span id="kpiConvRate">0.0% Conv. Rate</span>
+          </div>
+        </div>
+
+        <div class="kpi-card" style="--card-accent: #6366f1;">
+          <div class="kpi-label-group">
+            <span class="kpi-title">Cost Per Conv. (CPA)</span>
+            <span>⚡</span>
+          </div>
+          <div class="kpi-value" id="kpiCPA" style="color:#4f46e5;">AED 0.00</div>
+          <div class="kpi-footer">
+            <span>CPA (Spend / Conv)</span>
           </div>
         </div>
 
@@ -243,28 +256,6 @@
           <div class="kpi-value" id="kpiCPBA" style="color:#0284c7;">AED 0.00</div>
           <div class="kpi-footer">
             <span>CPBA (Spend / Booked)</span>
-          </div>
-        </div>
-
-        <div class="kpi-card" style="--card-accent: #8b5cf6;">
-          <div class="kpi-label-group">
-            <span class="kpi-title">Attended Patients</span>
-            <span>🏥</span>
-          </div>
-          <div class="kpi-value" id="kpiAttended">0 (0.0%)</div>
-          <div class="kpi-footer">
-            <span>Hospital Show-up Rate</span>
-          </div>
-        </div>
-
-        <div class="kpi-card" style="--card-accent: #ec4899;">
-          <div class="kpi-label-group">
-            <span class="kpi-title">Surgeries / Procedures</span>
-            <span>🩺</span>
-          </div>
-          <div class="kpi-value" id="kpiSurgeries" style="color: #6d28d9;">0</div>
-          <div class="kpi-footer">
-            <span>Scheduled Interventions</span>
           </div>
         </div>
 
@@ -295,8 +286,8 @@
       <div class="content-card" style="padding: 1.15rem 1.35rem; margin-bottom: 1.25rem;">
         <div class="card-header-row" style="margin-bottom: 0.85rem;">
           <div class="card-title-group">
-            <h3>Full-Funnel Patient Progression (Numerical Conversion Steps)</h3>
-            <p>Precise conversion drop-off from Search Impression to Confirmed Hospital Procedure</p>
+            <h3>Full-Funnel Campaign Progression (Numerical Conversion Steps)</h3>
+            <p>Precise conversion drop-off from Search Impression to Inbound Lead and Confirmed Hospital Appointment</p>
           </div>
         </div>
         <div class="numerical-funnel-grid">
@@ -311,24 +302,24 @@
             <div class="funnel-step-sub" id="funnelSubClicks">0.0% CTR</div>
           </div>
           <div class="funnel-step-box">
-            <div class="funnel-step-num">Step 3: Inbound Leads</div>
+            <div class="funnel-step-num">Step 3: Conversions</div>
             <div class="funnel-step-val" id="funnelValLeads">0</div>
-            <div class="funnel-step-sub" id="funnelSubLeads">0.0% Lead CvR</div>
+            <div class="funnel-step-sub" id="funnelSubLeads">0.0% Conv. Rate</div>
           </div>
           <div class="funnel-step-box">
-            <div class="funnel-step-num">Step 4: Confirmed Booked</div>
+            <div class="funnel-step-num">Step 4: Cost Per Conv (CPA)</div>
+            <div class="funnel-step-val" id="funnelValCPA" style="color:#4f46e5;">AED 0.00</div>
+            <div class="funnel-step-sub" id="funnelSubCPA">Ad Efficiency</div>
+          </div>
+          <div class="funnel-step-box">
+            <div class="funnel-step-num">Step 5: Confirmed Booked</div>
             <div class="funnel-step-val" id="funnelValBooked" style="color:#10b981;">0</div>
             <div class="funnel-step-sub" id="funnelSubBooked">0.0% Book Rate</div>
           </div>
-          <div class="funnel-step-box">
-            <div class="funnel-step-num">Step 5: Attended Show-Ups</div>
-            <div class="funnel-step-val" id="funnelValAttended" style="color:#0284c7;">0</div>
-            <div class="funnel-step-sub" id="funnelSubAttended">0.0% Show-Up</div>
-          </div>
-          <div class="funnel-step-box" style="background:#f5f3ff; border-color:#c4b5fd;">
-            <div class="funnel-step-num" style="color:#6d28d9;">Step 6: Surgeries Done</div>
-            <div class="funnel-step-val" id="funnelValSurgeries" style="color:#6d28d9;">0</div>
-            <div class="funnel-step-sub" id="funnelSubSurgeries" style="color:#6d28d9;">Procedures Done</div>
+          <div class="funnel-step-box" style="background:#f0fdf4; border-color:#86efac;">
+            <div class="funnel-step-num" style="color:#15803d;">Step 6: CPBA Yield</div>
+            <div class="funnel-step-val" id="funnelValCPBA" style="color:#15803d;">AED 0.00</div>
+            <div class="funnel-step-sub" id="funnelSubCPBA" style="color:#15803d;">Cost Per Appt</div>
           </div>
         </div>
       </div>
@@ -348,12 +339,12 @@
                 <tr>
                   <th>Territory</th>
                   <th class="cell-numeric">Spend (AED)</th>
+                  <th class="cell-numeric">Clicks</th>
                   <th class="cell-numeric">Avg CPC</th>
-                  <th class="cell-numeric">Leads</th>
+                  <th class="cell-numeric">Conv.</th>
+                  <th class="cell-numeric">CPA (AED)</th>
                   <th class="cell-numeric">Booked</th>
                   <th class="cell-numeric">CPBA</th>
-                  <th class="cell-numeric">Attended</th>
-                  <th class="cell-numeric">Surgeries</th>
                   <th class="cell-numeric">Top IS</th>
                 </tr>
               </thead>
@@ -366,7 +357,7 @@
           <div class="card-header-row">
             <div class="card-title-group">
               <h3>Clinical Specialities by Patient Bookings & CPBA</h3>
-              <p>Appointment volume & procedure yield across UAE facilities</p>
+              <p>Appointment volume & Google Ads efficiency across UAE specialities</p>
             </div>
           </div>
           <div class="table-wrapper">
@@ -375,11 +366,12 @@
                 <tr>
                   <th>Department</th>
                   <th class="cell-numeric">Spend</th>
-                  <th class="cell-numeric">Leads</th>
+                  <th class="cell-numeric">Clicks</th>
+                  <th class="cell-numeric">Avg CPC</th>
+                  <th class="cell-numeric">Conv.</th>
+                  <th class="cell-numeric">CPA</th>
                   <th class="cell-numeric">Booked</th>
                   <th class="cell-numeric">CPBA</th>
-                  <th class="cell-numeric">Attended</th>
-                  <th class="cell-numeric">Surgeries</th>
                 </tr>
               </thead>
               <tbody id="tbodySpecialityMatrix"></tbody>
@@ -493,8 +485,6 @@
               <!-- Call Center Patient Bookings & Outcomes -->
               <th class="cell-numeric" style="color: #4ade80;">Booked Appts</th>
               <th class="cell-numeric" style="color: #38bdf8;">CPBA (AED)</th>
-              <th class="cell-numeric">Attended Show-Ups</th>
-              <th class="cell-numeric" style="color: #c084fc;">Surgeries</th>
             </tr>
           </thead>
           <tbody id="tbodyExhaustiveAds"></tbody>
