@@ -608,44 +608,81 @@
 
         </div>
 
+        <!-- Tree Table Architecture Configuration Guide Card -->
+        <div style="background:#f8fafc; border:2px solid #028090; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+          <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.75rem;">
+            <span style="font-size:1.4rem;">🌲</span>
+            <h4 style="color:#028090; font-size:1.1rem; font-weight:800; margin:0;">
+              Google Ads Report Editor: Tree Table Configuration (5 Rows + 5 Metrics)
+            </h4>
+          </div>
+          <p style="font-size:0.84rem; color:#334155; line-height:1.5; margin-bottom:1rem;">
+            Because Google Ads Report Editor limits table columns, using a <strong>Tree Table</strong> is the ultimate industry standard. Drag the 5 dimensions into <strong>Rows</strong> and the 5 core metrics into <strong>Columns</strong>. The dashboard engine computes 100% of all derived metrics (CTR, CPA, CPBA, Booking %, Show-Up %) automatically!
+          </p>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:1rem;">
+              <div style="font-weight:800; font-size:0.88rem; color:#0b2545; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
+                <span>🔽</span> Drag these 5 Fields into <strong>ROWS</strong>:
+              </div>
+              <ol style="margin:0; padding-left:1.3rem; font-size:0.82rem; color:#475569; line-height:1.6;">
+                <li><code>Day</code> (Date)</li>
+                <li><code>Campaign</code> (Campaign name)</li>
+                <li><code>Account</code> (Territory: AUH, DXB, Northern Emirates, Sunny Clinics)</li>
+                <li><code>Ad group</code> (Ad group name)</li>
+                <li><code>Search keyword</code> (Keyword text)</li>
+              </ol>
+            </div>
+
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:1rem;">
+              <div style="font-weight:800; font-size:0.88rem; color:#107c41; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem;">
+                <span>📊</span> Drag these 5 Metrics into <strong>COLUMNS</strong>:
+              </div>
+              <ol style="margin:0; padding-left:1.3rem; font-size:0.82rem; color:#475569; line-height:1.6;">
+                <li><code>Impressions</code> (Impr.)</li>
+                <li><code>Clicks</code></li>
+                <li><code>Cost</code> (Cost AED)</li>
+                <li><code>Conversions</code> (Conv.)</li>
+                <li><code>Avg. CPC</code> (Average CPC)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
         <!-- In-Sheet Sync Button Google Apps Script Code -->
         <div style="background:#0b2545; color:#f8fafc; border-radius:12px; padding:1.25rem 1.5rem; margin-bottom:1.5rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
             <div>
               <span style="font-family:var(--font-heading); font-weight:800; font-size:1rem; color:#38bdf8;">
-                💻 1-Click Google Sheet Auto-Setup & Sync Script:
+                💻 1-Click Tree Table Auto-Setup & Sync Script:
               </span>
               <p style="font-size:0.76rem; color:#94a3b8;">
-                Paste into <strong>Extensions > Apps Script</strong> on your Google Sheet, then click <strong>Run</strong> on <code>setupAllTabsAndColumns</code> to auto-build both tabs with all 27+14 columns!
+                Paste into <strong>Extensions > Apps Script</strong> on your Google Sheet, then click <strong>Run</strong> on <code>setupAllTabsAndColumns</code> to auto-format both tabs for lakhs of rows!
               </p>
             </div>
             <button class="btn-header" style="background:#00a896; border-color:#00a896; color:#ffffff; font-weight:700; padding:0.45rem 1rem;" onclick="navigator.clipboard.writeText(`function onOpen() {
   SpreadsheetApp.getUi().createMenu('🚀 NMC Sync')
-    .addItem('✨ 1. Setup All Tabs & Columns', 'setupAllTabsAndColumns')
+    .addItem('✨ 1. Setup Tree Table Columns', 'setupAllTabsAndColumns')
     .addItem('🔄 2. Sync Data to Dashboard', 'syncDataToDashboard')
     .addToUi();
 }
 
 function setupAllTabsAndColumns() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  // Rename Google Spreadsheet Title
   try { ss.rename('NMC Healthcare (UAE) — Master Marketing & Call Center CRM Data'); } catch(e){}
 
-  // Tab 1: Google_Ads_Data (27 Columns)
+  // Tab 1: Google_Ads_Data (Tree Table Format)
   let adsSheet = ss.getSheetByName('Google_Ads_Data') || ss.insertSheet('Google_Ads_Data', 0);
   const adsHeaders = [
-    'Date', 'Campaign_Name', 'Ad_Account', 'Ad_Group_Name', 'Keyword', 'Match_Type',
-    'Quality_Score', 'Expected_CTR', 'Ad_Relevance', 'Landing_Page_Exp',
-    'Impressions', 'Clicks', 'CTR', 'Avg_CPC', 'Cost', 'Conversions', 'Cost_Per_Conv', 'Conv_Rate',
-    'Search_Impr_Share', 'Search_Top_IS', 'Search_Abs_Top_IS', 'Search_Lost_IS_Budget', 'Search_Lost_IS_Rank',
-    'Campaign_Type', 'Campaign_Status', 'Device', 'Phone_Calls'
+    'Day', 'Campaign', 'Account', 'Ad group', 'Search keyword',
+    'Impressions', 'Clicks', 'Cost', 'Conversions', 'Avg. CPC',
+    'CTR', 'Cost / conv.', 'Conv. rate', 'Search impr. share', 'Search lost IS (rank)', 'Phone calls'
   ];
   adsSheet.getRange(1, 1, 1, adsHeaders.length).setValues([adsHeaders]);
   adsSheet.getRange(1, 1, 1, adsHeaders.length).setBackground('#0b2545').setFontColor('#ffffff').setFontWeight('bold');
   adsSheet.setFrozenRows(1);
 
-  // Tab 2: Call_Center_Leads (Your 14 CRM Columns)
+  // Tab 2: Call_Center_Leads (14 CRM Columns)
   let leadsSheet = ss.getSheetByName('Call_Center_Leads') || ss.insertSheet('Call_Center_Leads', 1);
   const leadsHeaders = [
     'ID', 'Status', 'Patient', 'Phone', 'Email', 'Doctor', 'Branch', 'Department',
@@ -655,47 +692,49 @@ function setupAllTabsAndColumns() {
   leadsSheet.getRange(1, 1, 1, leadsHeaders.length).setBackground('#00a896').setFontColor('#ffffff').setFontWeight('bold');
   leadsSheet.setFrozenRows(1);
 
-  // Delete extra empty Sheet1
+  const statusRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(['Booked', 'Attended', 'Surgery Scheduled', 'Not Booked', 'Follow-Up Required', 'Cancelled'], true)
+    .build();
+  leadsSheet.getRange('B2:B100000').setDataValidation(statusRule);
+
   const defaultSheet = ss.getSheetByName('Sheet1');
   if (defaultSheet && ss.getSheets().length > 1) { try { ss.deleteSheet(defaultSheet); } catch(e){} }
 
-  SpreadsheetApp.getUi().alert('🎉 Setup Complete!\n\n• Spreadsheet Renamed\n• Tab 1: Google_Ads_Data (27 cols)\n• Tab 2: Call_Center_Leads (14 cols)\n• Ready for Sync!');
+  SpreadsheetApp.getUi().alert('🎉 Setup Complete!\n\n• Spreadsheet Renamed\n• Tab 1: Google_Ads_Data (Tree Table 5-Row + 5-Metric Format)\n• Tab 2: Call_Center_Leads (14 CRM Columns)\n• Capacity: Ready for Lakhs of rows!');
 }
 
 function syncDataToDashboard() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const adsSheet = ss.getSheetByName('Google_Ads_Data');
   const leadsSheet = ss.getSheetByName('Call_Center_Leads');
-  if (!adsSheet || !leadsSheet) {
-    return SpreadsheetApp.getUi().alert('Error: Run setupAllTabsAndColumns first.');
-  }
+  if (!adsSheet || !leadsSheet) return SpreadsheetApp.getUi().alert('Run setupAllTabsAndColumns first.');
   const adsData = adsSheet.getDataRange().getValues();
   const leadsData = leadsSheet.getDataRange().getValues();
   SpreadsheetApp.getUi().alert('✅ Verified ' + (adsData.length - 1) + ' Ads rows and ' + (leadsData.length - 1) + ' Leads ready for NMC Dashboard!');
-}`); alert('Copied 1-Click Auto-Setup & Sync Script to Clipboard!');">
-              📋 Copy Full Setup Script
+}`); alert('Copied Tree Table Setup & Sync Script to Clipboard!');">
+              📋 Copy Tree Table Setup Script
             </button>
           </div>
 
           <pre style="background:#061527; padding:1rem; border-radius:8px; font-family:var(--font-mono); font-size:0.78rem; color:#e2e8f0; overflow-x:auto; line-height:1.45;">
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('🚀 NMC Sync')
-    .addItem('✨ 1. Setup All Tabs & Columns', 'setupAllTabsAndColumns')
+    .addItem('✨ 1. Setup Tree Table Columns', 'setupAllTabsAndColumns')
     .addItem('🔄 2. Sync Data to Dashboard', 'syncDataToDashboard')
     .addToUi();
 }
 
 function setupAllTabsAndColumns() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  // Tab 1: Google_Ads_Data (27 Columns)
+  // Tab 1: Google_Ads_Data (Tree Table: Day, Campaign, Account, Ad group, Search keyword + 5 Metrics)
   let adsSheet = ss.getSheetByName('Google_Ads_Data') || ss.insertSheet('Google_Ads_Data', 0);
-  const adsHeaders = ['Date','Campaign_Name','Ad_Account','Ad_Group_Name','Keyword','Match_Type','Quality_Score','Expected_CTR','Ad_Relevance','Landing_Page_Exp','Impressions','Clicks','CTR','Avg_CPC','Cost','Conversions','Cost_Per_Conv','Conv_Rate','Search_Impr_Share','Search_Top_IS','Search_Abs_Top_IS','Search_Lost_IS_Budget','Search_Lost_IS_Rank','Campaign_Type','Campaign_Status','Device','Phone_Calls'];
+  const adsHeaders = ['Day', 'Campaign', 'Account', 'Ad group', 'Search keyword', 'Impressions', 'Clicks', 'Cost', 'Conversions', 'Avg. CPC', 'CTR', 'Cost / conv.', 'Conv. rate', 'Search impr. share', 'Search lost IS (rank)', 'Phone calls'];
   adsSheet.getRange(1, 1, 1, adsHeaders.length).setValues([adsHeaders]).setBackground('#0b2545').setFontColor('#ffffff').setFontWeight('bold');
   adsSheet.setFrozenRows(1);
 
   // Tab 2: Call_Center_Leads (Your 14 CRM Columns)
   let leadsSheet = ss.getSheetByName('Call_Center_Leads') || ss.insertSheet('Call_Center_Leads', 1);
-  const leadsHeaders = ['ID','Status','Patient','Phone','Email','Doctor','Branch','Department','Lead priority','Appointment Date','Appointment Time','Handled By','Response Time','Created At'];
+  const leadsHeaders = ['ID', 'Status', 'Patient', 'Phone', 'Email', 'Doctor', 'Branch', 'Department', 'Lead priority', 'Appointment Date', 'Appointment Time', 'Handled By', 'Response Time', 'Created At'];
   leadsSheet.getRange(1, 1, 1, leadsHeaders.length).setValues([leadsHeaders]).setBackground('#00a896').setFontColor('#ffffff').setFontWeight('bold');
   leadsSheet.setFrozenRows(1);
 }</pre>

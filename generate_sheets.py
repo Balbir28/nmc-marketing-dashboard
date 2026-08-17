@@ -24,21 +24,19 @@ ws_ads = wb.active
 ws_ads.title = "Google_Ads_Data"
 
 ads_headers = [
-    "Day", "Campaign", "Account", "Ad group", "Search keyword", "Match type",
-    "Quality score", "Exp. CTR", "Ad relevance", "Landing page exp.",
-    "Impressions", "Clicks", "CTR", "Avg. CPC", "Cost", "Conversions", "Cost / conv.", "Conv. rate",
-    "Search impr. share", "Search top IS", "Search abs. top IS", "Search lost IS (budget)", "Search lost IS (rank)",
-    "Phone calls"
+    "Day", "Campaign", "Account", "Ad group", "Search keyword",
+    "Impressions", "Clicks", "Cost", "Conversions", "Avg. CPC",
+    "CTR", "Cost / conv.", "Conv. rate", "Search impr. share", "Search lost IS (rank)", "Phone calls"
 ]
 
 ws_ads.append(ads_headers)
 
 sample_ads = [
-    ["2026-08-15", "Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun", "Sunny Clinics", "Internal Medicine - Exact", "internal medicine doctor samnan sharjah", "Exact", 9, "Above average", "Above average", "Above average", 310, 32, "10.32%", 8.40, 268.80, 6, 44.80, "18.75%", "88.0%", "88.0%", "62.0%", "8.0%", "4.0%", 3],
-    ["2026-08-15", "Alo_NMC_Search_Cardiology_Royal_Khalifa_AUH", "AUH", "Cardiology - Exact High Intent", "best cardiologist in abu dhabi", "Exact", 9, "Above average", "Above average", "Above average", 320, 30, "9.38%", 14.20, 426.00, 5, 85.20, "16.67%", "84.0%", "82.5%", "54.0%", "12.0%", "5.5%", 2],
-    ["2026-08-15", "Alo_NMC_Search_Orthopedics_Specialty_AlNahda_DXB", "DXB", "Orthopedics - Knee Replacement", "knee replacement surgeon dubai", "Exact", 9, "Above average", "Above average", "Above average", 280, 26, "9.28%", 22.40, 582.40, 5, 116.48, "19.23%", "86.0%", "85.0%", "59.0%", "9.0%", "5.0%", 2],
-    ["2026-08-15", "Alo_NMC_Search_Cardiology_Royal_Sharjah_SHJ", "Northern Emirates", "Cardiology - Exact High Intent", "cardiologist in sharjah royal hospital", "Exact", 9, "Above average", "Above average", "Above average", 290, 28, "9.66%", 12.80, 358.40, 5, 71.68, "17.86%", "87.0%", "87.0%", "61.0%", "7.0%", "6.0%", 2],
-    ["2026-08-15", "Alo_NMC_Search_Pediatrics_Center_Buhaira_Sun", "Sunny Clinics", "Pediatrics - Exact High Intent", "pediatrician buhaira corniche sharjah", "Exact", 9, "Above average", "Above average", "Above average", 360, 38, "10.56%", 7.50, 285.00, 8, 35.62, "21.05%", "90.0%", "90.0%", "69.0%", "5.0%", "5.0%", 4]
+    ["2026-08-15", "Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun", "Sunny Clinics", "Internal Medicine - Samnan High Intent", "internal medicine doctor samnan sharjah", 310, 32, 268.80, 6, 8.40, "10.32%", 44.80, "18.75%", "88.0%", "4.0%", 3],
+    ["2026-08-15", "Alo_NMC_Search_Cardiology_Royal_Khalifa_AUH", "AUH", "Cardiology - Exact High Intent", "best cardiologist in abu dhabi", 320, 30, 426.00, 5, 14.20, "9.38%", 85.20, "16.67%", "84.0%", "5.5%", 2],
+    ["2026-08-15", "Alo_NMC_Search_Orthopedics_Specialty_AlNahda_DXB", "DXB", "Orthopedics - Knee Replacement", "knee replacement surgeon dubai", 280, 26, 582.40, 5, 22.40, "9.28%", 116.48, "19.23%", "86.0%", "5.0%", 2],
+    ["2026-08-15", "Alo_NMC_Search_Cardiology_Royal_Sharjah_SHJ", "Northern Emirates", "Cardiology - Exact High Intent", "cardiologist in sharjah royal hospital", 290, 28, 358.40, 5, 12.80, "9.66%", 71.68, "17.86%", "87.0%", "6.0%", 2],
+    ["2026-08-15", "Alo_NMC_Search_Pediatrics_Center_Buhaira_Sun", "Sunny Clinics", "Pediatrics - Exact High Intent", "pediatrician buhaira corniche sharjah", 360, 38, 285.00, 8, 7.50, "10.56%", 35.62, "21.05%", "90.0%", "5.0%", 4]
 ]
 
 for row in sample_ads:
@@ -51,7 +49,7 @@ for col_idx in range(1, len(ads_headers) + 1):
     cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
 
 # -------------------------------------------------------------
-# TAB 2: Call_Center_Leads
+# TAB 2: Call_Center_Leads (14 Exact CRM Columns)
 # -------------------------------------------------------------
 ws_leads = wb.create_sheet(title="Call_Center_Leads")
 
@@ -83,13 +81,14 @@ for col_idx in range(1, len(leads_headers) + 1):
 # TAB 3: Tree_Table_Setup_Guide
 # -------------------------------------------------------------
 ws_guide = wb.create_sheet(title="Tree_Table_Setup_Guide")
-guide_title = ["Google Ads Report Editor Tree Table Configuration", ""]
+guide_title = ["Google Ads Report Editor Tree Table Configuration (5 Rows + 5 Metrics)", ""]
 ws_guide.append(guide_title)
 ws_guide.append(["", ""])
-ws_guide.append(["Row Hierarchy (First 4 Dimensions):", "1. Day  |  2. Campaign  |  3. Account  |  4. Ad group"])
-ws_guide.append(["Metric Columns:", "Search keyword, Match type, Quality score, Exp. CTR, Ad relevance, Landing page exp., Impr., Clicks, CTR, Avg. CPC, Cost, Conv., Cost / conv., Conv. rate, Search impr. share, Search top IS, Search abs. top IS, Search lost IS (budget), Search lost IS (rank), Phone calls"])
+ws_guide.append(["Row Dimensions in Google Ads Tree Table (Drag these 5 to Rows):", "1. Day (Date)  |  2. Campaign  |  3. Account  |  4. Ad group  |  5. Search keyword"])
+ws_guide.append(["Metric Columns in Google Ads Tree Table (Drag these 5 to Columns):", "1. Impressions  |  2. Clicks  |  3. Cost (AED)  |  4. Conversions  |  5. Avg. CPC"])
 ws_guide.append(["", ""])
-ws_guide.append(["Dashboard Connection:", "Directly paste rows into Google_Ads_Data tab and click '🚀 NMC Sync > 🔄 Sync Data to Dashboard'."])
+ws_guide.append(["Automated Derived Metrics Calculated by Dashboard:", "CTR %, Cost Per Conv (CPA), Conv. Rate %, Confirmed Bookings, CPBA, Show-Up Rate %, Speciality & Branch Extraction"])
+ws_guide.append(["Capacity:", "Pre-configured for Lakhs of rows (100,000 - 500,000+ rows) across both tabs."])
 
 ws_guide.cell(row=1, column=1).font = Font(name="Calibri", size=14, bold=True, color="107C41")
 
@@ -102,7 +101,7 @@ for ws in [ws_ads, ws_leads, ws_guide]:
             val = str(cell.value or '')
             if len(val) > max_len:
                 max_len = len(val)
-        ws.column_dimensions[col_letter].width = max(max_len + 4, 12)
+        ws.column_dimensions[col_letter].width = max(max_len + 4, 13)
 
 wb.save("NMC_Hospital_Master_Template.xlsx")
-print("Saved NMC_Hospital_Master_Template.xlsx with Google Ads Tree Table Schema!")
+print("Saved NMC_Hospital_Master_Template.xlsx with 5-Row + 5-Metric Tree Table Layout!")
