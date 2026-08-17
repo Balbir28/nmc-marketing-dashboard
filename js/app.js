@@ -62,17 +62,35 @@ const APP = {
    * Set Date Range Presets
    */
   setDatePreset(presetKey) {
-    const today = new Date(2026, 7, 15);
+    let startStr = '2026-07-01';
+    let endStr = '2026-08-31';
+
+    const now = new Date();
+    const today = new Date(2026, 7, 31);
     let start = new Date(today);
 
-    if (presetKey === '7d') start.setDate(today.getDate() - 7);
-    else if (presetKey === '14d') start.setDate(today.getDate() - 14);
-    else if (presetKey === '30d') start.setDate(today.getDate() - 30);
-    else if (presetKey === 'mtd') start = new Date(today.getFullYear(), today.getMonth(), 1);
-    else if (presetKey === 'all') start = new Date(2026, 6, 1);
+    if (presetKey === '7d') {
+      start.setDate(today.getDate() - 7);
+      startStr = start.toISOString().split('T')[0];
+      endStr = today.toISOString().split('T')[0];
+    } else if (presetKey === '14d') {
+      start.setDate(today.getDate() - 14);
+      startStr = start.toISOString().split('T')[0];
+      endStr = today.toISOString().split('T')[0];
+    } else if (presetKey === '30d') {
+      start.setDate(today.getDate() - 30);
+      startStr = start.toISOString().split('T')[0];
+      endStr = today.toISOString().split('T')[0];
+    } else if (presetKey === 'mtd') {
+      startStr = '2026-08-01';
+      endStr = '2026-08-31';
+    } else if (presetKey === 'all') {
+      startStr = '2020-01-01';
+      endStr = '2030-12-31';
+    }
 
-    this.filters.startDate = start.toISOString().split('T')[0];
-    this.filters.endDate = today.toISOString().split('T')[0];
+    this.filters.startDate = startStr;
+    this.filters.endDate = endStr;
 
     const startInput = document.getElementById('filterStartDate');
     const endInput = document.getElementById('filterEndDate');

@@ -419,19 +419,23 @@ const NMC_DATA_STORE = {
       const convRate = clicks > 0 ? Number(((conversions / clicks) * 100).toFixed(2)) : (Number(String(row.Conv_Rate || row['Conv. rate (%)'] || row['Conv. rate'] || 0).replace(/[^\d.-]/g, '')) || 0);
       const costPerConv = conversions > 0 ? Number((cost / conversions).toFixed(2)) : (Number(String(row.Cost_Per_Conv || row['Cost / conv.'] || row['Cost / conversion'] || 0).replace(/[^\d.-]/g, '')) || 0);
 
+      const rawDay = row.Date || row.Day || row['Day'] || row['Date'] || '';
+      const normDate = NMC_PARSER.normalizeDate(rawDay);
+
       return {
-        Date: row.Date || row['Day'] || new Date().toISOString().split('T')[0],
+        Date: normDate,
+        Day: normDate,
         Ad_Account: row.Ad_Account || parsed.adAccount,
         Hospital_Branch: row.Hospital_Branch || parsed.hospitalBranch,
         Department_Speciality: row.Department_Speciality || parsed.department,
         Campaign_Name: campaignName,
-        Campaign_ID: row.Campaign_ID || row['Campaign ID'] || '',
+        Campaign_ID: row.Campaign_ID || row['Campaign ID'] || row['Customer ID'] || '',
         Campaign_Type: row.Campaign_Type || parsed.campaignType,
         Campaign_Status: row.Campaign_Status || 'Enabled',
         Ad_Group_Name: row.Ad_Group_Name || row['Ad group'] || '',
         Keyword: row.Keyword || row['Search keyword'] || row['Keyword text'] || '',
-        Match_Type: row.Match_Type || row['Match type'] || 'Exact',
-        Quality_Score: Number(row.Quality_Score || row['Quality score'] || 7) || 7,
+        Match_Type: row.Match_Type || row['Search keyword match type'] || row['Match type'] || 'Phrase match',
+        Quality_Score: Number(row.Quality_Score || row['Quality Score'] || row['Quality score'] || 7) || 7,
         Expected_CTR: row.Expected_CTR || row['Exp. CTR'] || 'Average',
         Ad_Relevance: row.Ad_Relevance || row['Ad relevance'] || 'Average',
         Landing_Page_Exp: row.Landing_Page_Exp || row['Landing page exp.'] || 'Average',
@@ -463,10 +467,23 @@ const NMC_DATA_STORE = {
     const normalized = rawRows.map((row, idx) => {
       const branch = NMC_PARSER.normalizeBranch(row.Branch || row['Hospital'] || row['Facility'] || '');
       const department = NMC_PARSER.normalizeDepartment(row.Department || row['Speciality'] || '');
-      const status = row.Status || row['Lead Status'] || 'Booked';
+      
+      const rawStatus = String(row.Status || row['Lead Status'] || 'Booked').trim().toLowerCase();
+      let status = 'Booked';
+      if (rawStatus.includes('not booked')) status = 'Not Booked';
+      else if (rawStatus.includes('not reachable') || rawStatus.includes('unreachable')) status = 'Not Reachable';
+      else if (rawStatus.includes('follow')) status = 'Follow Up';
+      else if (rawStatus.includes('cancel')) status = 'Cancelled';
+      else if (rawStatus.includes('surgery') || rawStatus.includes('procedure')) status = 'Surgery Scheduled';
+      else if (rawStatus.includes('attended') || rawStatus.includes('show')) status = 'Attended';
+      else if (rawStatus.includes('book')) status = 'Booked';
 
       const regionMatch = NMC_PARSER.regions.find(r => r.patterns.some(p => p.test(branch)));
       const adAccount = regionMatch ? regionMatch.key : 'AUH';
+
+      const rawCreated = row['Created At'] || row['Created_At'] || row['Appointment Date'] || '';
+      const normCreated = NMC_PARSER.normalizeDate(rawCreated);
+      const normApptDate = NMC_PARSER.normalizeDate(row['Appointment Date'] || rawCreated);
 
       return {
         ID: row.ID || row['Lead ID'] || `LD-${idx + 1000}`,
@@ -478,12 +495,12 @@ const NMC_DATA_STORE = {
         Branch: branch,
         Department: department,
         'Lead priority': row['Lead priority'] || row['Priority'] || 'Medium',
-        'Appointment Date': row['Appointment Date'] || row['Appointment_Date'] || '',
+        'Appointment Date': normApptDate,
         'Appointment Time': row['Appointment Time'] || row['Appointment_Time'] || '',
         'Handled By': row['Handled By'] || row['Agent'] || 'Call Center Agent',
         'Response Time': row['Response Time'] || row['Response_Time'] || '5 mins',
-        'Created At': row['Created At'] || row['Created_At'] || new Date().toISOString(),
-        Lost_Reason: row.Lost_Reason || row['Lost Reason'] || (status === 'Not Booked' ? 'Insurance / Schedule Mismatch' : ''),
+        'Created At': normCreated,
+        Lost_Reason: row.Lost_Reason || row['Lost Reason'] || (status === 'Not Booked' || status === 'Not Reachable' ? 'Schedule / Distance / Insurance' : ''),
         Ad_Account: adAccount,
         Campaign_Name: row.Campaign_Name || `Alo_NMC_Search_${department}_${branch.replace(/\s+/g, '')}_Sun`,
         Keyword: row.Keyword || ''

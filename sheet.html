@@ -546,12 +546,39 @@
         'Lead priority', 'Appointment Date', 'Appointment Time', 'Handled By', 'Response Time', 'Created At'
       ],
 
+      getFieldValue(obj, header) {
+        if (obj[header] !== undefined && obj[header] !== '') return String(obj[header]);
+        if (header === 'Day' || header === 'Date') return obj.Date || obj.Day || '';
+        if (header === 'Campaign' || header === 'Campaign_Name') return obj.Campaign_Name || obj.Campaign || '';
+        if (header === 'Account' || header === 'Account name' || header === 'Ad_Account') return obj.Ad_Account || obj.Account || '';
+        if (header === 'Ad group' || header === 'Ad_Group_Name') return obj.Ad_Group_Name || obj['Ad group'] || '';
+        if (header === 'Search keyword' || header === 'Keyword') return obj.Keyword || obj['Search keyword'] || '';
+        if (header === 'Impressions' || header === 'Impr.') return String(obj.Impressions || 0);
+        if (header === 'Clicks') return String(obj.Clicks || 0);
+        if (header === 'Cost') return String(obj.Cost || 0);
+        if (header === 'Conversions' || header === 'Conv.') return String(obj.Conversions || 0);
+        if (header === 'Avg. CPC' || header === 'Avg_CPC') return String(obj.Avg_CPC || 0);
+        if (header === 'CTR') return String(obj.CTR || 0);
+        if (header === 'Cost / conv.' || header === 'Cost_Per_Conv') return String(obj.Cost_Per_Conv || 0);
+        if (header === 'Conv. rate' || header === 'Conv_Rate') return String(obj.Conv_Rate || 0);
+        if (header === 'Search impr. share' || header === 'Search_Impr_Share') return String(obj.Search_Impr_Share || 0);
+        if (header === 'Search lost IS (rank)' || header === 'Search_Lost_IS_Rank') return String(obj.Search_Lost_IS_Rank || 0);
+        if (header === 'Phone calls' || header === 'Phone_Calls') return String(obj.Phone_Calls || 0);
+        return '';
+      },
+
       init() {
         NMC_DATA_STORE.init();
         
         // Load initial data from data store
-        this.adsRows = NMC_DATA_STORE.adsData.map(a => this.adsHeaders.map(h => a[h] !== undefined ? String(a[h]) : ''));
+        this.adsRows = NMC_DATA_STORE.adsData.map(a => this.adsHeaders.map(h => this.getFieldValue(a, h)));
         this.leadsRows = NMC_DATA_STORE.leadsData.map(l => this.leadsHeaders.map(h => l[h] !== undefined ? String(l[h]) : ''));
+
+        NMC_DATA_STORE.subscribe(() => {
+          this.adsRows = NMC_DATA_STORE.adsData.map(a => this.adsHeaders.map(h => this.getFieldValue(a, h)));
+          this.leadsRows = NMC_DATA_STORE.leadsData.map(l => this.leadsHeaders.map(h => l[h] !== undefined ? String(l[h]) : ''));
+          this.renderTable();
+        });
 
         this.renderTable();
         this.attachGlobalPasteHandler();

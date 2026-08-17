@@ -1,23 +1,24 @@
 /**
- * NMC Healthcare (UAE) - Automated Campaign Name Intelligence & Parser Engine (V3)
+ * NMC Healthcare (UAE) - Automated Campaign Name Intelligence & Parser Engine (V4)
  * 
- * Supports exact formats like:
- * "Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun"
+ * Supports real Google Ads campaign formats:
+ * - "Alo_NMC_Search_Padiac_Center_Al_Nahda_Dubai"
+ * - "Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun"
  * 
  * Extracts:
- * 1. Ad Account / Region (AUH, DXB, Northern Emirates, Sunny Clinics via 'Sun' or 'Sunny')
- * 2. Hospital Branch (e.g. Center Samnan, NMC Royal Khalifa City, NMC Specialty Al Nahda, etc.)
- * 3. Clinical Department / Speciality (e.g. Internal Medicine, Cardiology, Orthopedics, IVF, etc.)
- * 4. Campaign Network / Type (Search, PMax, Display, Video)
+ * 1. Ad Account / Region (AUH, DXB, Northern Emirates, Sunny Clinics)
+ * 2. Hospital Branch (e.g. NMC Specialty Al Nahda, NMC Royal Khalifa City, Sunny Samnan, etc.)
+ * 3. Clinical Department / Speciality (e.g. Pediatrics, Cardiology, Orthopedics, etc.)
+ * 4. Normalizes dates (M/D/YY, DD-MM-YYYY, YYYY-MM-DD)
  */
 
 const NMC_PARSER = {
   // Ad Account & Territory Mappings
   regions: [
     { key: 'Sunny Clinics', label: 'Sunny Clinics (UAE)', patterns: [/\b_?sun\b/i, /sunny/i, /sunny\s*clinics/i, /sunny\s*medical/i, /samnan/i, /buhaira/i, /yarmook/i, /shahba/i, /meena/i] },
-    { key: 'AUH', label: 'AUH (Abu Dhabi)', patterns: [/\bauh\b/i, /abu\s*dhabi/i, /\bcapital\b/i, /khalifa/i, /bareen/i, /al\s*ain/i, /electra/i, /mbz/i] },
-    { key: 'DXB', label: 'DXB (Dubai)', patterns: [/\bdxb\b/i, /dubai/i, /al\s*nahda/i, /\bdip\b/i, /deira/i, /al\s*barsha/i, /barsha/i] },
-    { key: 'Northern Emirates', label: 'Northern Emirates', patterns: [/northern\s*emirates/i, /\bne\b/i, /sharjah/i, /\bshj\b/i, /ajman/i, /\bajm\b/i, /rak\b/i, /ras\s*al\s*khaimah/i, /fujairah/i, /\bfuj\b/i, /uaq\b/i, /umm\s*al\s*quwain/i, /rolla/i] }
+    { key: 'AUH', label: 'AUH (Abu Dhabi)', patterns: [/\bauh\b/i, /abu\s*dhabi/i, /\bcapital\b/i, /khalifa/i, /bareen/i, /al\s*ain/i, /electra/i, /mbz/i, /nmc\s*auh/i] },
+    { key: 'DXB', label: 'DXB (Dubai)', patterns: [/\bdxb\b/i, /dubai/i, /al\s*nahda/i, /\bdip\b/i, /deira/i, /al\s*barsha/i, /barsha/i, /nmc\s*dxb/i] },
+    { key: 'Northern Emirates', label: 'Northern Emirates', patterns: [/northern\s*emirates/i, /\bne\b/i, /sharjah/i, /\bshj\b/i, /ajman/i, /\bajm\b/i, /rak\b/i, /ras\s*al\s*khaimah/i, /fujairah/i, /\bfuj\b/i, /uaq\b/i, /umm\s*al\s*quwain/i, /rolla/i, /nmc\s*ne/i] }
   ],
 
   // Hospital & Facility Branches Mappings
@@ -32,14 +33,15 @@ const NMC_PARSER = {
 
     // Abu Dhabi
     { name: 'NMC Royal Hospital Khalifa City', region: 'AUH', patterns: [/nmc\s*royal\s*khalifa/i, /royal\s*khalifa/i, /khalifacity/i, /khalifa\s*city/i, /khalifa/i] },
+    { name: 'NMC Royal Hospital Abu Dhabi', region: 'AUH', patterns: [/nmc\s*royal\s*hospital,\s*abu\s*dhabi/i, /nmc\s*royal\s*hospital\s*abu\s*dhabi/i, /royal\s*abu\s*dhabi/i] },
     { name: 'NMC Specialty Hospital Abu Dhabi', region: 'AUH', patterns: [/nmc\s*specialty\s*auh/i, /specialty\s*abu\s*dhabi/i, /electra/i, /madinat\s*zayed/i, /specialty\s*auh/i] },
     { name: 'NMC Bareen International Hospital', region: 'AUH', patterns: [/bareen/i, /bareen\s*hospital/i, /mbz\s*city/i, /mohammed\s*bin\s*zayed/i, /mbz/i] },
     { name: 'NMC Royal Women\'s Hospital', region: 'AUH', patterns: [/royal\s*women/i, /brightpoint/i, /womens\s*hospital/i] },
     { name: 'NMC Medical Center Al Ain', region: 'AUH', patterns: [/al\s*ain/i, /nmc\s*al\s*ain/i] },
 
     // Dubai
-    { name: 'NMC Specialty Hospital Al Nahda', region: 'DXB', patterns: [/al\s*nahda/i, /nahda/i, /specialty\s*dxb/i, /specialty\s*dubai/i, /nmc\s*al\s*nahda/i] },
-    { name: 'NMC Royal Hospital DIP', region: 'DXB', patterns: [/nmc\s*royal\s*dip/i, /\bdip\b/i, /dubai\s*investments\s*park/i, /royal\s*dip/i] },
+    { name: 'NMC Specialty Hospital Al Nahda', region: 'DXB', patterns: [/al\s*nahda/i, /nahda/i, /specialty\s*dxb/i, /specialty\s*dubai/i, /nmc\s*al\s*nahda/i, /al_nahda/i] },
+    { name: 'NMC Royal Hospital DIP', region: 'DXB', patterns: [/nmc\s*royal\s*dip/i, /\bdip\b/i, /dubai\s*investments\s*park/i, /royal\s*dip/i, /royal\s*hospital,\s*dip/i] },
     { name: 'NMC Medical Center Deira', region: 'DXB', patterns: [/deira/i, /nmc\s*deira/i, /al\s*rigga/i] },
     { name: 'NMC Day Surgery Al Barsha', region: 'DXB', patterns: [/al\s*barsha/i, /barsha/i, /day\s*surgery\s*barsha/i] },
 
@@ -52,22 +54,22 @@ const NMC_PARSER = {
 
   // Clinical Departments & Medical Specialities Mappings
   departments: [
-    { name: 'Internal Medicine', patterns: [/internal\s*medicine/i, /internal\s*med/i, /general\s*medicine/i, /family\s*med/i, /\bgp\b/i, /general\s*physician/i, /physician/i] },
+    { name: 'Internal Medicine', patterns: [/internal\s*medicine/i, /internal\s*med/i, /general\s*medicine/i, /family\s*med/i, /\bgp\b/i, /general\s*physician/i, /physician/i, /radiology/i] },
     { name: 'Cardiology', patterns: [/cardio/i, /heart/i, /cardiolog/i, /angioplasty/i, /ecg/i, /echo/i, /hypertension/i] },
     { name: 'Orthopedics', patterns: [/ortho/i, /bone/i, /joint/i, /knee/i, /spine/i, /arthroscopy/i, /fracture/i, /ligament/i, /hip\s*replacement/i] },
     { name: 'IVF & Fertility', patterns: [/\bivf\b/i, /fertil/i, /fakih/i, /iui/i, /embryo/i, /icsi/i, /conception/i, /infertility/i] },
-    { name: 'Pediatrics', patterns: [/pedia/i, /child/i, /paediatric/i, /infant/i, /baby/i, /vaccination/i, /neonatal/i] },
-    { name: 'Gynecology & Obstetrics', patterns: [/gyn/i, /obs/i, /maternity/i, /pregnan/i, /delivery/i, /women/i, /c-section/i, /antenatal/i] },
-    { name: 'Dental', patterns: [/dent/i, /teeth/i, /orthodont/i, /implant/i, /braces/i, /root\s*canal/i, /veneer/i] },
+    { name: 'Pediatrics', patterns: [/pedia/i, /padiac/i, /child/i, /paediatric/i, /infant/i, /baby/i, /vaccination/i, /neonatal/i] },
+    { name: 'Gynecology & Obstetrics', patterns: [/gyn/i, /obs/i, /maternity/i, /pregnan/i, /delivery/i, /women/i, /c-section/i, /antenatal/i, /obstetrics/i, /gynaecology/i, /lactation/i, /foetal/i, /fetal/i] },
+    { name: 'Dental', patterns: [/dent/i, /teeth/i, /orthodont/i, /implant/i, /braces/i, /root\s*canal/i, /veneer/i, /dentistry/i] },
     { name: 'Oncology', patterns: [/onco/i, /cancer/i, /tumor/i, /chemo/i, /radiation/i, /biopsy/i] },
     { name: 'Dermatology & Aesthetics', patterns: [/derma/i, /skin/i, /laser/i, /botox/i, /filler/i, /hair\s*loss/i, /hydrafacial/i, /aesthetic/i] },
     { name: 'ENT (Ear, Nose & Throat)', patterns: [/\bent\b/i, /ear/i, /nose/i, /throat/i, /sinus/i, /audiolog/i, /tonsil/i] },
     { name: 'Neurology & Neurosurgery', patterns: [/neuro/i, /brain/i, /stroke/i, /epilepsy/i, /migraine/i, /dementia/i] },
     { name: 'Gastroenterology', patterns: [/gastro/i, /endoscopy/i, /colonoscopy/i, /stomach/i, /liver/i, /\bgi\b/i, /gerd/i] },
-    { name: 'General & Bariatric Surgery', patterns: [/general\s*surg/i, /bariatric/i, /surg/i, /hernia/i, /gallbladder/i, /appendix/i, /laparoscop/i, /weight\s*loss\s*surg/i] },
+    { name: 'General & Bariatric Surgery', patterns: [/general\s*surg/i, /bariatric/i, /surg/i, /hernia/i, /gallbladder/i, /appendix/i, /laparoscop/i, /weight\s*loss\s*surg/i, /laparoscopic/i] },
     { name: 'Ophthalmology (Eye Care)', patterns: [/ophthal/i, /eye/i, /lasik/i, /cataract/i, /vision/i, /glaucoma/i, /retina/i] },
     { name: 'Urology & Andrology', patterns: [/uro/i, /kidney\s*stone/i, /prostate/i, /androlog/i, /bladder/i] },
-    { name: 'Physiotherapy & Rehab', patterns: [/physio/i, /rehab/i, /physical\s*therapy/i, /chiropractic/i] }
+    { name: 'Physiotherapy & Rehab', patterns: [/physio/i, /rehab/i, /physical\s*therapy/i, /chiropractic/i, /pain\s*management/i] }
   ],
 
   // Campaign Types / Channels
@@ -80,8 +82,46 @@ const NMC_PARSER = {
   ],
 
   /**
+   * Normalize any date format to ISO YYYY-MM-DD
+   */
+  normalizeDate(rawDate) {
+    if (!rawDate) return '2026-08-01';
+    const str = String(rawDate).trim();
+    if (!str) return '2026-08-01';
+
+    // Format: YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+
+    // Format: M/D/YY or M/D/YYYY (e.g. "8/1/26" or "8/15/2026")
+    const mdy = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+    if (mdy) {
+      let month = mdy[1].padStart(2, '0');
+      let day = mdy[2].padStart(2, '0');
+      let year = mdy[3];
+      if (year.length === 2) year = '20' + year;
+      return `${year}-${month}-${day}`;
+    }
+
+    // Format: DD-MM-YYYY or DD/MM/YYYY (e.g. "22-07-2026")
+    const dmy = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+    if (dmy) {
+      let day = dmy[1].padStart(2, '0');
+      let month = dmy[2].padStart(2, '0');
+      let year = dmy[3];
+      return `${year}-${month}-${day}`;
+    }
+
+    // Format: "22 Jul 2026, 12:22"
+    const textDate = new Date(str);
+    if (!isNaN(textDate.getTime())) {
+      return textDate.toISOString().split('T')[0];
+    }
+
+    return '2026-08-01';
+  },
+
+  /**
    * Parse a raw campaign name string and extract all structured metadata
-   * Handles formats like: "Alo_NMC_Search_Internal Medicine_Center_Samnan_Sun"
    */
   parseCampaign(campaignName = '', accountHint = '') {
     const raw = String(campaignName).trim();
@@ -110,7 +150,17 @@ const NMC_PARSER = {
       detectedRegion = 'Sunny Clinics';
     }
 
-    // 2. Detect Branch
+    // 2. Detect Region from Account Hint (e.g. "NMC DXB", "NMC AUH", "NMC NE")
+    if (!detectedRegion && accountHint) {
+      for (const r of this.regions) {
+        if (r.key.toLowerCase() === accountHint.toLowerCase() || r.patterns.some(p => p.test(accountHint))) {
+          detectedRegion = r.key;
+          break;
+        }
+      }
+    }
+
+    // 3. Detect Branch
     for (const b of this.branches) {
       for (const pattern of b.patterns) {
         if (pattern.test(raw)) {
@@ -122,29 +172,23 @@ const NMC_PARSER = {
       if (detectedBranch) break;
     }
 
-    // 3. Detect Region if still not resolved
+    // 4. Detect Region from campaign name if still unresolved
     if (!detectedRegion) {
-      if (accountHint) {
-        const matchingAccount = this.regions.find(r => r.key.toLowerCase() === accountHint.toLowerCase() || r.patterns.some(p => p.test(accountHint)));
-        if (matchingAccount) detectedRegion = matchingAccount.key;
-      }
-      if (!detectedRegion) {
-        for (const r of this.regions) {
-          for (const pattern of r.patterns) {
-            if (pattern.test(raw)) {
-              detectedRegion = r.key;
-              break;
-            }
+      for (const r of this.regions) {
+        for (const pattern of r.patterns) {
+          if (pattern.test(raw)) {
+            detectedRegion = r.key;
+            break;
           }
-          if (detectedRegion) break;
         }
+        if (detectedRegion) break;
       }
     }
 
-    // Default region fallback
+    // Fallback region
     if (!detectedRegion) detectedRegion = 'AUH';
 
-    // Fallback branch if region is known but specific branch wasn't extracted
+    // Fallback branch
     if (!detectedBranch) {
       if (detectedRegion === 'Sunny Clinics') detectedBranch = 'Sunny Medical Centre Samnan';
       else if (detectedRegion === 'AUH') detectedBranch = 'NMC Royal Hospital Khalifa City';
@@ -153,7 +197,7 @@ const NMC_PARSER = {
       else detectedBranch = 'NMC Royal Hospital Khalifa City';
     }
 
-    // 4. Detect Department / Speciality
+    // 5. Detect Department / Speciality
     for (const d of this.departments) {
       for (const pattern of d.patterns) {
         if (pattern.test(raw)) {
@@ -168,7 +212,7 @@ const NMC_PARSER = {
       detectedDepartment = 'Internal Medicine';
     }
 
-    // 5. Detect Campaign Type
+    // 6. Detect Campaign Type
     for (const t of this.campaignTypes) {
       for (const pattern of t.patterns) {
         if (pattern.test(raw)) {
