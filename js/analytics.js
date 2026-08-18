@@ -154,13 +154,19 @@ const NMC_ANALYTICS = {
       const booked = depLeads.filter(l => l.Status === 'Booked' || l.Status === 'Attended' || l.Status === 'Surgery Scheduled').length;
       const attended = depLeads.filter(l => l.Status === 'Attended' || l.Status === 'Surgery Scheduled').length;
       const surgeries = depLeads.filter(l => l.Status === 'Surgery Scheduled').length;
-      const spend = depMap[dep].spend;
+      const spend = depMap[dep].spend || 0;
+      const clicks = depMap[dep].clicks || 0;
+      const impr = depMap[dep].impr || 0;
+      const conv = depMap[dep].conversions || 0;
       const cpba = booked > 0 ? (spend / booked) : 0;
       const bookingRate = depLeads.length > 0 ? ((booked / depLeads.length) * 100) : 0;
 
       return {
         department: dep,
         totalSpend: spend,
+        totalClicks: clicks,
+        totalImpressions: impr,
+        totalConversions: conv,
         totalLeads: depLeads.length,
         totalBooked: booked,
         totalAttended: attended,
@@ -170,7 +176,7 @@ const NMC_ANALYTICS = {
       };
     });
 
-    return results.sort((a, b) => b.totalBooked - a.totalBooked);
+    return results.sort((a, b) => b.totalSpend - a.totalSpend);
   },
 
   getCallCenterAnalysis(leads) {

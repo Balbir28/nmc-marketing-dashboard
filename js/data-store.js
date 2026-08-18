@@ -337,8 +337,20 @@ const NMC_DATA_STORE = {
 
   parseDelimitedText(text, delimiter = null) {
     if (!text || typeof text !== 'string') return [];
-    const lines = text.trim().split(/\r?\n/);
+    let lines = text.trim().split(/\r?\n/).filter(l => l.trim().length > 0);
     if (lines.length < 2) return [];
+
+    // Find true header line index (skip any leading markdown or HTTP metadata)
+    let headerIdx = 0;
+    for (let i = 0; i < Math.min(25, lines.length); i++) {
+      const line = lines[i];
+      if (/^["']?(Day|Date|ID|Campaign|Account|Status|Patient)/i.test(line) || line.includes('","') || (line.split(',').length >= 5) || (line.split('\t').length >= 5)) {
+        headerIdx = i;
+        break;
+      }
+    }
+
+    lines = lines.slice(headerIdx);
 
     if (!delimiter) {
       const header = lines[0];
