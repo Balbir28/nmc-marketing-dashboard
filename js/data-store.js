@@ -524,7 +524,7 @@ const NMC_DATA_STORE = {
         adRelevance = this.extractStr(row, 'Ad relevance', 'Ad_Relevance') || 'Average';
         landingPageExp = this.extractStr(row, 'Landing page exp.', 'Landing_Page_Exp') || 'Average';
         impressions = this.extractNum(row, 'Impr.', 'Impressions', 'Impr', 'impressions');
-        clicks = this.extractNum(row, 'Clicks', 'Click', 'clicks');
+        clicks = this.extractNum(row, 'Clicks', 'Click', 'clicks', 'Interactions', 'interactions');
         cost = this.extractNum(row, 'Cost', 'Cost (AED)', 'Spend', 'Cost_AED', 'cost');
         conversions = this.extractNum(row, 'Conversions', 'Conv.', 'Conv', 'conversions');
         rawDay = this.extractStr(row, 'Day', 'Date', 'day', 'date');
@@ -715,7 +715,7 @@ const NMC_DATA_STORE = {
     for (let i = 1; i < lines.length; i++) {
       if (!lines[i].trim()) continue;
       const cols = parseLine(lines[i]);
-      const obj = {};
+      const obj = { _rawValues: cols };
       headers.forEach((h, idx) => {
         obj[h] = cols[idx] !== undefined ? cols[idx] : '';
       });

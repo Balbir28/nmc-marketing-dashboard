@@ -28,11 +28,16 @@ const NMC_PARSER = {
   branches: [
     // Sunny Clinics
     { name: 'Sunny Medical Centre Samnan', region: 'Sunny Clinics', patterns: [/samnan/i, /center\s*samnan/i, /sunny\s*samnan/i] },
-    { name: 'Sunny Al Buhaira Medical Centre', region: 'Sunny Clinics', patterns: [/buhaira/i, /corniche\s*buhaira/i, /sunny\s*buhaira/i] },
+    { name: 'Sunny Al Buhaira Medical Centre', region: 'Sunny Clinics', patterns: [/buhaira/i, /buhariah/i, /corniche\s*buhaira/i, /sunny\s*buhaira/i] },
     { name: 'Sunny Al Yarmook Medical Centre', region: 'Sunny Clinics', patterns: [/yarmook/i, /sunny\s*yarmook/i] },
     { name: 'Sunny Medical Centre Shahba', region: 'Sunny Clinics', patterns: [/shahba/i, /sunny\s*shahba/i] },
     { name: 'Sunny Clinic Meena', region: 'Sunny Clinics', patterns: [/meena/i, /sunny\s*meena/i] },
     { name: 'Sunny Specialty Medical Centre', region: 'Sunny Clinics', patterns: [/sunny\s*specialty/i, /sunny\s*main/i, /sunny\s*center/i] },
+    { name: 'Sunny Sharqan Medical Centre', region: 'Sunny Clinics', patterns: [/sharqan/i, /sunny\s*sharqan/i] },
+    { name: 'Sunny Maysaloon Medical Centre', region: 'Sunny Clinics', patterns: [/maysaloon/i, /sunny\s*maysaloon/i] },
+    { name: 'Sunny Medical Centre Al Majaz', region: 'Sunny Clinics', patterns: [/al[_\-]?majaz/i, /majaz/i] },
+    { name: 'Sunny Medical Centre Safari Mall', region: 'Sunny Clinics', patterns: [/safari[_\-]?mall/i] },
+    { name: 'NMC Medical Centre Al Quoz', region: 'Sunny Clinics', patterns: [/al[_\-]?quoz/i, /quoz/i] },
 
     // Abu Dhabi
     { name: 'NMC Royal Hospital Khalifa City', region: 'AUH', patterns: [/nmc\s*royal\s*khalifa/i, /royal\s*khalifa/i, /khalifacity/i, /khalifa\s*city/i, /khalifa/i] },
@@ -1628,7 +1633,7 @@ const NMC_DATA_STORE = {
         adRelevance = this.extractStr(row, 'Ad relevance', 'Ad_Relevance') || 'Average';
         landingPageExp = this.extractStr(row, 'Landing page exp.', 'Landing_Page_Exp') || 'Average';
         impressions = this.extractNum(row, 'Impr.', 'Impressions', 'Impr', 'impressions');
-        clicks = this.extractNum(row, 'Clicks', 'Click', 'clicks');
+        clicks = this.extractNum(row, 'Clicks', 'Click', 'clicks', 'Interactions', 'interactions');
         cost = this.extractNum(row, 'Cost', 'Cost (AED)', 'Spend', 'Cost_AED', 'cost');
         conversions = this.extractNum(row, 'Conversions', 'Conv.', 'Conv', 'conversions');
         rawDay = this.extractStr(row, 'Day', 'Date', 'day', 'date');
@@ -1819,7 +1824,7 @@ const NMC_DATA_STORE = {
     for (let i = 1; i < lines.length; i++) {
       if (!lines[i].trim()) continue;
       const cols = parseLine(lines[i]);
-      const obj = {};
+      const obj = { _rawValues: cols };
       headers.forEach((h, idx) => {
         obj[h] = cols[idx] !== undefined ? cols[idx] : '';
       });
