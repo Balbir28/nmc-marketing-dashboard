@@ -18,7 +18,7 @@ const NMC_PARSER = {
     { key: 'Sunny Clinics', label: 'Sunny Clinics (UAE)', patterns: [/\b_?sun\b/i, /sunny/i, /sunny\s*clinics/i, /sunny\s*medical/i, /samnan/i, /buhaira/i, /yarmook/i, /shahba/i, /meena/i] },
     { key: 'AUH', label: 'AUH (Abu Dhabi)', patterns: [/\bauh\b/i, /abu\s*dhabi/i, /\bcapital\b/i, /khalifa/i, /bareen/i, /al\s*ain/i, /electra/i, /mbz/i, /nmc\s*auh/i] },
     { key: 'DXB', label: 'DXB (Dubai)', patterns: [/\bdxb\b/i, /dubai/i, /al\s*nahda/i, /\bdip\b/i, /deira/i, /al\s*barsha/i, /barsha/i, /nmc\s*dxb/i] },
-    { key: 'Northern Emirates', label: 'Northern Emirates', patterns: [/northern\s*emirates/i, /\bne\b/i, /sharjah/i, /\bshj\b/i, /ajman/i, /\bajm\b/i, /rak\b/i, /ras\s*al\s*khaimah/i, /fujairah/i, /\bfuj\b/i, /uaq\b/i, /umm\s*al\s*quwain/i, /rolla/i, /nmc\s*ne/i] }
+    { key: 'Northern Emirates', label: 'Northern Emirates', patterns: [/northern\s*emirates/i, /north\s*emirates/i, /\bnmc\s*north/i, /\bne\b/i, /sharjah/i, /\bshj\b/i, /ajman/i, /\bajm\b/i, /rak\b/i, /ras\s*al\s*khaimah/i, /fujairah/i, /\bfuj\b/i, /uaq\b/i, /umm\s*al\s*quwain/i, /rolla/i, /nmc\s*ne/i] }
   ],
 
   // Hospital & Facility Branches Mappings

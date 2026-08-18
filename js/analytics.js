@@ -86,8 +86,8 @@ const NMC_ANALYTICS = {
     const attendanceRate = totalBooked > 0 ? ((totalAttended / totalBooked) * 100) : 0;
     const cpba = totalBooked > 0 ? (totalSpend / totalBooked) : 0; // Cost Per Booked Appointment
 
-    const weightedTopIS = ads.reduce((sum, a) => sum + ((a.Search_Top_IS || 0) * (a.Impressions || 1)), 0);
-    const avgTopIS = totalImpressions > 0 ? (weightedTopIS / totalImpressions) : 75;
+    const weightedTopIS = ads.reduce((sum, a) => sum + ((a.Search_Top_IS || 0) * (a.Impressions || 0)), 0);
+    const avgTopIS = totalImpressions > 0 ? Math.min(100, Math.max(0, weightedTopIS / totalImpressions)) : 75.0;
 
     // Response time calculation
     let totalRespMins = 0;

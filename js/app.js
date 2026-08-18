@@ -471,15 +471,16 @@ const APP = {
       if (el) el.textContent = val;
     };
 
+    const convCount = m.totalGoogleConv > 0 ? m.totalGoogleConv : m.totalLeads;
     const ctr = m.totalImpressions > 0 ? ((m.totalClicks / m.totalImpressions) * 100).toFixed(1) : '0.0';
-    const convRate = m.totalClicks > 0 ? ((m.totalLeads / m.totalClicks) * 100).toFixed(1) : '0.0';
-    const cpa = m.totalLeads > 0 ? (m.totalSpend / m.totalLeads).toFixed(2) : '0.00';
+    const convRate = m.totalClicks > 0 ? ((convCount / m.totalClicks) * 100).toFixed(1) : '0.0';
+    const cpa = convCount > 0 ? (m.totalSpend / convCount).toFixed(2) : '0.00';
 
     setVal('kpiSpend', `AED ${Math.round(m.totalSpend).toLocaleString()}`);
     setVal('kpiAvgCPC', `AED ${m.overallAvgCPC.toFixed(2)}`);
     setVal('kpiClicks', m.totalClicks.toLocaleString());
     setVal('kpiImprCtr', `${m.totalImpressions.toLocaleString()} Impr. (${ctr}% CTR)`);
-    setVal('kpiLeads', m.totalLeads.toLocaleString());
+    setVal('kpiLeads', Math.round(convCount).toLocaleString());
     setVal('kpiConvRate', `${convRate}% Conv. Rate`);
     setVal('kpiCPA', `AED ${cpa}`);
     setVal('kpiBooked', `${m.totalBooked.toLocaleString()} (${m.bookingRate.toFixed(1)}%)`);
@@ -489,9 +490,10 @@ const APP = {
   },
 
   renderNumericalFunnel(m) {
+    const convCount = m.totalGoogleConv > 0 ? m.totalGoogleConv : m.totalLeads;
     const ctr = m.totalImpressions > 0 ? ((m.totalClicks / m.totalImpressions) * 100).toFixed(1) : 0;
-    const cvr = m.totalClicks > 0 ? ((m.totalLeads / m.totalClicks) * 100).toFixed(1) : 0;
-    const cpa = m.totalLeads > 0 ? (m.totalSpend / m.totalLeads).toFixed(2) : '0.00';
+    const cvr = m.totalClicks > 0 ? ((convCount / m.totalClicks) * 100).toFixed(1) : 0;
+    const cpa = convCount > 0 ? (m.totalSpend / convCount).toFixed(2) : '0.00';
 
     const setBox = (idVal, idSub, val, sub) => {
       const elVal = document.getElementById(idVal);
@@ -502,10 +504,10 @@ const APP = {
 
     setBox('funnelValImpr', 'funnelSubImpr', m.totalImpressions.toLocaleString(), '100% Reach');
     setBox('funnelValClicks', 'funnelSubClicks', m.totalClicks.toLocaleString(), `${ctr}% CTR`);
-    setBox('funnelValLeads', 'funnelSubLeads', m.totalLeads.toLocaleString(), `${cvr}% Conv. Rate`);
+    setBox('funnelValLeads', 'funnelSubLeads', Math.round(convCount).toLocaleString(), `${cvr}% Conv. Rate`);
     setBox('funnelValCPA', 'funnelSubCPA', `AED ${cpa}`, 'Ad CPA');
     setBox('funnelValBooked', 'funnelSubBooked', m.totalBooked.toLocaleString(), `${m.bookingRate.toFixed(1)}% Book Rate`);
-    setBox('funnelValCPBA', 'funnelSubCPBA', `AED ${m.cpba > 0 ? m.cpba.toFixed(2) : '0.00'}`, 'Cost Per Appt');
+    setBox('funnelValSurgeries', 'funnelSubSurgeries', `AED ${m.cpba > 0 ? m.cpba.toFixed(2) : '0.00'}`, 'Cost Per Appt');
   },
 
   renderNumericalRegionalMatrix(regions) {
