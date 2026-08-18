@@ -528,6 +528,12 @@ const NMC_DATA_STORE = {
         cost = this.extractNum(row, 'Cost', 'Cost (AED)', 'Spend', 'Cost_AED', 'cost');
         conversions = this.extractNum(row, 'Conversions', 'Conv.', 'Conv', 'conversions');
         rawDay = this.extractStr(row, 'Day', 'Date', 'day', 'date');
+        
+        topIS = this.extractNum(row, 'Search impr. share', 'Search_Impr_Share', 'Search_Top_IS') || 75;
+        absTopIS = this.extractNum(row, 'Search abs. top IS', 'Search_Abs_Top_IS') || 45;
+        lostRank = this.extractNum(row, 'Search lost IS (rank)', 'Search_Lost_IS_Rank') || 10;
+        lostBudget = this.extractNum(row, 'Search lost IS (budget)', 'Search_Lost_IS_Budget') || 15;
+        phoneCalls = this.extractNum(row, 'Phone calls', 'Phone_Calls') || 0;
       }
 
       const parsed = NMC_PARSER.parseCampaign(campaignName, adAccountHint);
