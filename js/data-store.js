@@ -593,6 +593,7 @@ const NMC_DATA_STORE = {
       let status = 'Booked';
       if (rawStatus.includes('not booked')) status = 'Not Booked';
       else if (rawStatus.includes('not reachable') || rawStatus.includes('unreachable')) status = 'Not Reachable';
+      else if (rawStatus.includes('pending')) status = 'Pending';
       else if (rawStatus.includes('follow')) status = 'Follow Up';
       else if (rawStatus.includes('cancel')) status = 'Cancelled';
       else if (rawStatus.includes('surgery') || rawStatus.includes('procedure')) status = 'Surgery Scheduled';

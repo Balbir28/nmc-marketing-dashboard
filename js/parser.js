@@ -34,7 +34,11 @@ const NMC_PARSER = {
     { name: 'Sunny Maysaloon Medical Centre', region: 'Sunny Clinics', patterns: [/maysaloon/i, /sunny\s*maysaloon/i] },
     { name: 'Sunny Medical Centre Al Majaz', region: 'Sunny Clinics', patterns: [/al[_\-]?majaz/i, /majaz/i] },
     { name: 'Sunny Medical Centre Safari Mall', region: 'Sunny Clinics', patterns: [/safari[_\-]?mall/i] },
-    { name: 'NMC Medical Centre Al Quoz', region: 'Sunny Clinics', patterns: [/al[_\-]?quoz/i, /quoz/i] },
+    { name: 'Sunny Medical Centre Al Quoz', region: 'Sunny Clinics', patterns: [/al[_\-]?quoz/i, /quoz/i] },
+    { name: 'Sunny Medical Centre Deira', region: 'Sunny Clinics', patterns: [/deira/i] },
+    { name: 'Sunny Medical Centre Rolla', region: 'Sunny Clinics', patterns: [/rolla/i] },
+    { name: 'Sunny Medical Centre Al Nahda', region: 'Sunny Clinics', patterns: [/al[_\s\-]*nahda/i, /nahda/i] },
+    { name: 'Sunny Medical Centre RAK', region: 'Sunny Clinics', patterns: [/\brak\b/i] },
 
     // Abu Dhabi
     { name: 'NMC Royal Hospital Khalifa City', region: 'AUH', patterns: [/nmc\s*royal\s*khalifa/i, /royal\s*khalifa/i, /khalifacity/i, /khalifa\s*city/i, /khalifa/i] },
@@ -165,16 +169,32 @@ const NMC_PARSER = {
       }
     }
 
-    // 3. Detect Branch
-    for (const b of this.branches) {
-      for (const pattern of b.patterns) {
-        if (pattern.test(raw)) {
-          detectedBranch = b.name;
-          if (!detectedRegion) detectedRegion = b.region;
-          break;
+    // 3. Detect Branch — scope by region to avoid cross-region mismatches
+    if (isSunny) {
+      // Only try Sunny branches
+      for (const b of this.branches) {
+        if (b.region !== 'Sunny Clinics') continue;
+        for (const pattern of b.patterns) {
+          if (pattern.test(raw)) {
+            detectedBranch = b.name;
+            break;
+          }
         }
+        if (detectedBranch) break;
       }
-      if (detectedBranch) break;
+    } else {
+      // Skip Sunny-only branches (they share location names with DXB/NE)
+      for (const b of this.branches) {
+        if (b.region === 'Sunny Clinics') continue;
+        for (const pattern of b.patterns) {
+          if (pattern.test(raw)) {
+            detectedBranch = b.name;
+            if (!detectedRegion) detectedRegion = b.region;
+            break;
+          }
+        }
+        if (detectedBranch) break;
+      }
     }
 
     // 4. Detect Region from campaign name if still unresolved
