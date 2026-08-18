@@ -447,6 +447,7 @@ const APP = {
     this.renderNumericalFunnel(execMetrics);
     this.renderNumericalRegionalMatrix(regionalData);
     this.renderNumericalSpecialityMatrix(departmentData);
+    this.renderSunnySpecialityMatrix(filteredAds, filteredLeads);
     this.renderNumericalCallCenterSummary(execMetrics, callCenterData);
 
     // 4. Render Tabular Data Table with Next Steps (No Revenue)
@@ -550,6 +551,63 @@ const APP = {
         </tr>
       `;
     }).join('');
+  },
+
+  renderSunnySpecialityMatrix(ads, leads) {
+    const tbody = document.getElementById('tbodySunnySpecialityMatrix');
+    if (!tbody) return;
+
+    const sunnyAds = ads.filter(a => a.Ad_Account === 'Sunny Clinics');
+    const sunnyLeads = leads.filter(l => l.Ad_Account === 'Sunny Clinics');
+
+    const depMap = {};
+    sunnyAds.forEach(a => {
+      const dep = a.Department_Speciality || 'General Medicine';
+      if (!depMap[dep]) {
+        depMap[dep] = { department: dep, spend: 0, clicks: 0, impr: 0, conversions: 0 };
+      }
+      depMap[dep].spend += (a.Cost || 0);
+      depMap[dep].clicks += (a.Clicks || 0);
+      depMap[dep].impr += (a.Impressions || 0);
+      depMap[dep].conversions += (a.Conversions || 0);
+    });
+
+    const results = Object.keys(depMap).map(dep => {
+      const depLeads = sunnyLeads.filter(l => l.Department === dep);
+      const booked = depLeads.filter(l => l.Status === 'Booked' || l.Status === 'Attended' || l.Status === 'Surgery Scheduled').length;
+      const spend = depMap[dep].spend || 0;
+      const clicks = depMap[dep].clicks || 0;
+      const impr = depMap[dep].impr || 0;
+      const conv = depMap[dep].conversions || 0;
+      const ctr = impr > 0 ? ((clicks / impr) * 100).toFixed(2) : '0.00';
+      const avgCpc = clicks > 0 ? (spend / clicks).toFixed(2) : '0.00';
+      const cpba = booked > 0 ? (spend / booked).toFixed(2) : '0.00';
+
+      return {
+        department: dep,
+        spend,
+        clicks,
+        impr,
+        conv,
+        ctr,
+        avgCpc,
+        booked,
+        cpba
+      };
+    }).sort((a, b) => b.spend - a.spend);
+
+    tbody.innerHTML = results.map(d => `
+      <tr>
+        <td style="font-weight:700; color:#0b2545;">${d.department}</td>
+        <td class="cell-numeric">AED ${Math.round(d.spend).toLocaleString()}</td>
+        <td class="cell-numeric">${d.clicks.toLocaleString()}</td>
+        <td class="cell-numeric">${d.impr.toLocaleString()} <span style="font-size:0.75rem; color:#64748b;">(${d.ctr}%)</span></td>
+        <td class="cell-numeric">AED ${d.avgCpc}</td>
+        <td class="cell-numeric">${d.conv}</td>
+        <td class="cell-numeric"><strong>${d.booked}</strong></td>
+        <td class="cell-numeric" style="font-weight:700; color:#028090;">AED ${d.cpba > 0 ? Number(d.cpba).toFixed(2) : '0.00'}</td>
+      </tr>
+    `).join('');
   },
 
   renderNumericalCallCenterSummary(exec, cc) {

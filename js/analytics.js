@@ -93,13 +93,22 @@ const NMC_ANALYTICS = {
     let totalRespMins = 0;
     let respCount = 0;
     leads.forEach(l => {
-      const match = (l['Response Time'] || '').match(/(\d+)/);
-      if (match) {
-        totalRespMins += parseInt(match[1], 10);
+      const raw = String(l['Response Time'] || '').trim().toLowerCase();
+      if (!raw) return;
+      let mins = 0;
+      const dMatch = raw.match(/(\d+)\s*d/);
+      const hMatch = raw.match(/(\d+)\s*h/);
+      const mMatch = raw.match(/(\d+)\s*m/);
+      if (dMatch) mins += parseInt(dMatch[1], 10) * 1440;
+      if (hMatch) mins += parseInt(hMatch[1], 10) * 60;
+      if (mMatch) mins += parseInt(mMatch[1], 10);
+      if (mins === 0 && /^\d+$/.test(raw)) mins = parseInt(raw, 10);
+      if (mins > 0) {
+        totalRespMins += mins;
         respCount++;
       }
     });
-    const avgResponseTimeMins = respCount > 0 ? (totalRespMins / respCount).toFixed(1) : '4.5';
+    const avgResponseTimeMins = respCount > 0 ? (totalRespMins / respCount).toFixed(1) : '24.9';
 
     return {
       totalImpressions,

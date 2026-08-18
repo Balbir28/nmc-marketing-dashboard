@@ -41,11 +41,11 @@ const NMC_PARSER = {
     { name: 'Sunny Medical Centre RAK', region: 'Sunny Clinics', patterns: [/\brak\b/i] },
 
     // Abu Dhabi
-    { name: 'NMC Royal Hospital Khalifa City', region: 'AUH', patterns: [/nmc\s*royal\s*khalifa/i, /royal\s*khalifa/i, /khalifacity/i, /khalifa\s*city/i, /khalifa/i] },
+    { name: 'NMC Royal Hospital Khalifa City', region: 'AUH', patterns: [/nmc\s*royal\s*khalifa/i, /royal\s*khalifa/i, /khalifacity/i, /khalifa\s*city/i, /khalifa/i, /rk_ad/i, /_rk_/i] },
     { name: 'NMC Royal Hospital Abu Dhabi', region: 'AUH', patterns: [/nmc\s*royal\s*hospital,\s*abu\s*dhabi/i, /nmc\s*royal\s*hospital\s*abu\s*dhabi/i, /royal\s*abu\s*dhabi/i] },
     { name: 'NMC Specialty Hospital Abu Dhabi', region: 'AUH', patterns: [/nmc\s*specialty\s*auh/i, /specialty\s*abu\s*dhabi/i, /electra/i, /madinat\s*zayed/i, /specialty\s*auh/i] },
-    { name: 'NMC Bareen International Hospital', region: 'AUH', patterns: [/bareen/i, /bareen\s*hospital/i, /mbz\s*city/i, /mohammed\s*bin\s*zayed/i, /mbz/i] },
-    { name: 'NMC Royal Women\'s Hospital', region: 'AUH', patterns: [/royal\s*women/i, /brightpoint/i, /womens\s*hospital/i] },
+    { name: 'NMC Bareen International Hospital', region: 'AUH', patterns: [/bareen/i, /bareen\s*hospital/i, /mbz\s*city/i, /mohammed\s*bin\s*zayed/i, /mbz/i, /mbzc/i, /_mbzc_/i] },
+    { name: 'NMC Royal Women\'s Hospital', region: 'AUH', patterns: [/royal\s*women/i, /brightpoint/i, /womens\s*hospital/i, /roh_ad/i, /_roh_/i] },
     { name: 'NMC Medical Center Al Ain', region: 'AUH', patterns: [/al\s*ain/i, /nmc\s*al\s*ain/i] },
 
     // Dubai
@@ -63,11 +63,11 @@ const NMC_PARSER = {
 
   // Clinical Departments & Medical Specialities Mappings
   departments: [
-    { name: 'Internal Medicine', patterns: [/internal\s*medicine/i, /internal\s*med/i, /general\s*medicine/i, /family\s*med/i, /\bgp\b/i, /general\s*physician/i, /physician/i, /radiology/i] },
+    { name: 'Internal Medicine', patterns: [/internal\s*medicine/i, /internal\s*med/i, /internalmed/i, /general\s*medicine/i, /gp\b/i, /general\s*physician/i, /physician/i, /radiology/i, /nutrition/i] },
     { name: 'Cardiology', patterns: [/cardio/i, /heart/i, /cardiolog/i, /angioplasty/i, /ecg/i, /echo/i, /hypertension/i] },
     { name: 'Orthopedics', patterns: [/ortho/i, /bone/i, /joint/i, /knee/i, /spine/i, /arthroscopy/i, /fracture/i, /ligament/i, /hip\s*replacement/i] },
     { name: 'IVF & Fertility', patterns: [/\bivf\b/i, /fertil/i, /fakih/i, /iui/i, /embryo/i, /icsi/i, /conception/i, /infertility/i] },
-    { name: 'Pediatrics', patterns: [/pedia/i, /padiac/i, /child/i, /paediatric/i, /infant/i, /baby/i, /vaccination/i, /neonatal/i] },
+    { name: 'Pediatrics', patterns: [/pedia/i, /paedia/i, /padiac/i, /child/i, /paediatric/i, /infant/i, /baby/i, /vaccination/i, /neonat/i] },
     { name: 'Gynecology & Obstetrics', patterns: [/gyn/i, /obs/i, /maternity/i, /pregnan/i, /delivery/i, /women/i, /c-section/i, /antenatal/i, /obstetrics/i, /gynaecology/i, /lactation/i, /foetal/i, /fetal/i] },
     { name: 'Dental', patterns: [/dent/i, /teeth/i, /orthodont/i, /implant/i, /braces/i, /root\s*canal/i, /veneer/i, /dentistry/i] },
     { name: 'Oncology', patterns: [/onco/i, /cancer/i, /tumor/i, /chemo/i, /radiation/i, /biopsy/i] },
@@ -78,7 +78,9 @@ const NMC_PARSER = {
     { name: 'General & Bariatric Surgery', patterns: [/general\s*surg/i, /bariatric/i, /surg/i, /hernia/i, /gallbladder/i, /appendix/i, /laparoscop/i, /weight\s*loss\s*surg/i, /laparoscopic/i] },
     { name: 'Ophthalmology (Eye Care)', patterns: [/ophthal/i, /eye/i, /lasik/i, /cataract/i, /vision/i, /glaucoma/i, /retina/i] },
     { name: 'Urology & Andrology', patterns: [/uro/i, /kidney\s*stone/i, /prostate/i, /androlog/i, /bladder/i] },
-    { name: 'Physiotherapy & Rehab', patterns: [/physio/i, /rehab/i, /physical\s*therapy/i, /chiropractic/i, /pain\s*management/i] }
+    { name: 'Physiotherapy & Rehab', patterns: [/physio/i, /rehab/i, /physical\s*therapy/i, /chiropractic/i, /pain\s*management/i] },
+    { name: 'Family Medicine', patterns: [/familymed/i, /family\s*medicine/i, /family\s*doctor/i] },
+    { name: 'Endocrinology', patterns: [/endo\b|endo_centre|endocrin/i] }
   ],
 
   // Campaign Types / Channels
