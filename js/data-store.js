@@ -380,7 +380,7 @@ const NMC_DATA_STORE = {
     for (let i = 1; i < lines.length; i++) {
       if (!lines[i].trim()) continue;
       const values = parseLine(lines[i]);
-      const row = {};
+      const row = { _rawValues: values };
       headers.forEach((h, index) => {
         let val = values[index] !== undefined ? values[index].replace(/^["']|["']$/g, '').trim() : '';
         row[h] = val;
@@ -433,10 +433,20 @@ const NMC_DATA_STORE = {
     
     // Filter out empty rows, Google Ads Tree Table totals, or metadata comments
     const validRows = rawRows.filter(row => {
-      const camp = this.extractStr(row, 'Campaign', 'Campaign_Name', 'Campaign name', 'campaign_name');
-      const kw = this.extractStr(row, 'Search keyword', 'Keyword', 'Keyword text', 'Search_Keyword');
-      const adGroup = this.extractStr(row, 'Ad group', 'Ad_Group_Name', 'Ad Group');
+      let camp = '';
+      let kw = '';
+      let adGroup = '';
       
+      if (row._rawValues && row._rawValues.length >= 6) {
+        camp = String(row._rawValues[1] || '').trim();
+        adGroup = String(row._rawValues[4] || '').trim();
+        kw = String(row._rawValues[5] || '').trim();
+      } else {
+        camp = this.extractStr(row, 'Campaign', 'Campaign_Name', 'Campaign name', 'campaign_name');
+        kw = this.extractStr(row, 'Search keyword', 'Keyword', 'Keyword text', 'Search_Keyword');
+        adGroup = this.extractStr(row, 'Ad group', 'Ad_Group_Name', 'Ad Group');
+      }
+
       if (!camp && !kw && !adGroup) return false;
       if (camp.startsWith('Total:') || camp.startsWith('--') || camp.toLowerCase() === 'total') return false;
       if (kw.startsWith('Total:') || kw.startsWith('--')) return false;
@@ -444,20 +454,75 @@ const NMC_DATA_STORE = {
     });
 
     const normalized = validRows.map(row => {
-      const campaignName = this.extractStr(row, 'Campaign', 'Campaign_Name', 'Campaign name');
-      const adAccountHint = this.extractStr(row, 'Account name', 'Account', 'Ad_Account', 'Customer ID', 'ad_account');
+      let campaignName = '';
+      let adAccountHint = '';
+      let customerId = '';
+      let adGroupName = '';
+      let keyword = '';
+      let matchType = 'Phrase match';
+      let qualityScore = 7;
+      let expCtr = 'Average';
+      let adRelevance = 'Average';
+      let landingPageExp = 'Average';
+      let impressions = 0;
+      let clicks = 0;
+      let cost = 0;
+      let conversions = 0;
+      let rawDay = '';
+      let topIS = 75;
+      let absTopIS = 45;
+      let lostRank = 10;
+      let lostBudget = 15;
+      let phoneCalls = 0;
+
+      // Check if row has raw positional columns from 25-col Google Ads export
+      if (row._rawValues && row._rawValues.length >= 18) {
+        rawDay = String(row._rawValues[0] || '').trim();
+        campaignName = String(row._rawValues[1] || '').trim();
+        adAccountHint = String(row._rawValues[2] || '').trim();
+        customerId = String(row._rawValues[3] || '').trim();
+        adGroupName = String(row._rawValues[4] || '').trim();
+        keyword = String(row._rawValues[5] || '').trim();
+        matchType = String(row._rawValues[6] || 'Phrase match').trim();
+        qualityScore = Number(String(row._rawValues[7] || '').replace(/[^\d.-]/g, '')) || 7;
+        expCtr = String(row._rawValues[8] || 'Average').trim();
+        adRelevance = String(row._rawValues[9] || 'Average').trim();
+        landingPageExp = String(row._rawValues[10] || 'Average').trim();
+        
+        impressions = Number(String(row._rawValues[11] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+        clicks = Number(String(row._rawValues[12] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+        cost = Number(String(row._rawValues[16] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+        conversions = Number(String(row._rawValues[17] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+        
+        if (row._rawValues.length >= 24) {
+          topIS = Number(String(row._rawValues[20] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 75;
+          absTopIS = Number(String(row._rawValues[21] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 45;
+          lostRank = Number(String(row._rawValues[22] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 10;
+          phoneCalls = Number(String(row._rawValues[23] || '').replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+        }
+      } else {
+        campaignName = this.extractStr(row, 'Campaign', 'Campaign_Name', 'Campaign name');
+        adAccountHint = this.extractStr(row, 'Account name', 'Account', 'Ad_Account', 'Customer ID', 'ad_account');
+        customerId = this.extractStr(row, 'Customer ID', 'Campaign ID', 'Campaign_ID');
+        adGroupName = this.extractStr(row, 'Ad group', 'Ad_Group_Name', 'Ad Group');
+        keyword = this.extractStr(row, 'Search keyword', 'Keyword', 'Keyword text');
+        matchType = this.extractStr(row, 'Search keyword match type', 'Match_Type', 'Match type') || 'Phrase match';
+        qualityScore = this.extractNum(row, 'Quality Score', 'Quality score', 'Quality_Score') || 7;
+        expCtr = this.extractStr(row, 'Exp. CTR', 'Expected_CTR') || 'Average';
+        adRelevance = this.extractStr(row, 'Ad relevance', 'Ad_Relevance') || 'Average';
+        landingPageExp = this.extractStr(row, 'Landing page exp.', 'Landing_Page_Exp') || 'Average';
+        impressions = this.extractNum(row, 'Impr.', 'Impressions', 'Impr', 'impressions');
+        clicks = this.extractNum(row, 'Clicks', 'Click', 'clicks');
+        cost = this.extractNum(row, 'Cost', 'Cost (AED)', 'Spend', 'Cost_AED', 'cost');
+        conversions = this.extractNum(row, 'Conversions', 'Conv.', 'Conv', 'conversions');
+        rawDay = this.extractStr(row, 'Day', 'Date', 'day', 'date');
+      }
+
       const parsed = NMC_PARSER.parseCampaign(campaignName, adAccountHint);
-
-      const impressions = this.extractNum(row, 'Impr.', 'Impressions', 'Impr', 'impressions');
-      const clicks = this.extractNum(row, 'Clicks', 'Click', 'clicks');
-      const cost = this.extractNum(row, 'Cost', 'Cost (AED)', 'Spend', 'Cost_AED', 'cost');
-      const conversions = this.extractNum(row, 'Conversions', 'Conv.', 'Conv', 'conversions');
-      const avgCpc = clicks > 0 ? Number((cost / clicks).toFixed(2)) : (this.extractNum(row, 'Avg. CPC', 'Avg CPC', 'Avg_CPC') || 0);
-      const ctr = impressions > 0 ? Number(((clicks / impressions) * 100).toFixed(2)) : (this.extractNum(row, 'CTR', 'CTR (%)') || 0);
-      const convRate = clicks > 0 ? Number(((conversions / clicks) * 100).toFixed(2)) : (this.extractNum(row, 'Conv. rate', 'Conv_Rate', 'Conv. rate (%)') || 0);
-      const costPerConv = conversions > 0 ? Number((cost / conversions).toFixed(2)) : (this.extractNum(row, 'Cost / conv.', 'Cost_Per_Conv', 'Cost/conv. (Converted currency)') || 0);
-
-      const rawDay = this.extractStr(row, 'Day', 'Date', 'day', 'date');
+      const avgCpc = clicks > 0 ? Number((cost / clicks).toFixed(2)) : 0;
+      const ctr = impressions > 0 ? Number(((clicks / impressions) * 100).toFixed(2)) : 0;
+      const convRate = clicks > 0 ? Number(((conversions / clicks) * 100).toFixed(2)) : 0;
+      const costPerConv = conversions > 0 ? Number((cost / conversions).toFixed(2)) : 0;
       const normDate = NMC_PARSER.normalizeDate(rawDay);
 
       return {
@@ -467,17 +532,17 @@ const NMC_DATA_STORE = {
         Hospital_Branch: row.Hospital_Branch || parsed.hospitalBranch,
         Department_Speciality: row.Department_Speciality || parsed.department,
         Campaign_Name: campaignName,
-        Campaign_ID: this.extractStr(row, 'Customer ID', 'Campaign ID', 'Campaign_ID'),
-        Campaign_Type: this.extractStr(row, 'Campaign_Type', 'Campaign Type') || parsed.campaignType,
-        Campaign_Status: this.extractStr(row, 'Campaign_Status', 'Campaign Status') || 'Enabled',
-        Ad_Group_Name: this.extractStr(row, 'Ad group', 'Ad_Group_Name', 'Ad Group'),
-        Keyword: this.extractStr(row, 'Search keyword', 'Keyword', 'Keyword text'),
-        Match_Type: this.extractStr(row, 'Search keyword match type', 'Match_Type', 'Match type') || 'Phrase match',
-        Quality_Score: this.extractNum(row, 'Quality Score', 'Quality score', 'Quality_Score') || 7,
-        Expected_CTR: this.extractStr(row, 'Exp. CTR', 'Expected_CTR') || 'Average',
-        Ad_Relevance: this.extractStr(row, 'Ad relevance', 'Ad_Relevance') || 'Average',
-        Landing_Page_Exp: this.extractStr(row, 'Landing page exp.', 'Landing_Page_Exp') || 'Average',
-        Device: this.extractStr(row, 'Device') || 'Mobile',
+        Campaign_ID: customerId,
+        Campaign_Type: parsed.campaignType,
+        Campaign_Status: 'Enabled',
+        Ad_Group_Name: adGroupName,
+        Keyword: keyword,
+        Match_Type: matchType,
+        Quality_Score: qualityScore,
+        Expected_CTR: expCtr,
+        Ad_Relevance: adRelevance,
+        Landing_Page_Exp: landingPageExp,
+        Device: 'Mobile',
         Impressions: impressions,
         Clicks: clicks,
         CTR: ctr,
@@ -486,12 +551,12 @@ const NMC_DATA_STORE = {
         Conversions: conversions,
         Cost_Per_Conv: costPerConv,
         Conv_Rate: convRate,
-        Phone_Calls: this.extractNum(row, 'Phone calls', 'Phone_Calls', 'Call clicks') || Math.round(conversions * 0.4),
-        Search_Impr_Share: this.extractNum(row, 'Search impr. share', 'Search_Impr_Share') || 70,
-        Search_Top_IS: this.extractNum(row, 'Search top IS', 'Search abs. top IS', 'Search_Top_IS') || 75,
-        Search_Abs_Top_IS: this.extractNum(row, 'Search abs. top IS', 'Search_Abs_Top_IS') || 45,
-        Search_Lost_IS_Budget: this.extractNum(row, 'Search lost IS (budget)', 'Search_Lost_IS_Budget') || 15,
-        Search_Lost_IS_Rank: this.extractNum(row, 'Search lost IS (rank)', 'Search_Lost_IS_Rank') || 10
+        Phone_Calls: phoneCalls || Math.round(conversions * 0.4),
+        Search_Impr_Share: topIS,
+        Search_Top_IS: topIS,
+        Search_Abs_Top_IS: absTopIS,
+        Search_Lost_IS_Budget: lostBudget,
+        Search_Lost_IS_Rank: lostRank
       };
     });
 
