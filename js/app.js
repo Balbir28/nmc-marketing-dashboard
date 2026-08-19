@@ -62,10 +62,11 @@ const APP = {
    * Set Date Range Presets
    */
   setDatePreset(presetKey) {
-    let startStr = '2026-07-01';
-    let endStr = '2026-08-31';
+    if (!presetKey) return;
 
-    const now = new Date();
+    let startStr = '2020-01-01';
+    let endStr = '2030-12-31';
+
     const today = new Date(2026, 7, 31);
     let start = new Date(today);
 
@@ -97,7 +98,7 @@ const APP = {
     if (startInput) startInput.value = this.filters.startDate;
     if (endInput) endInput.value = this.filters.endDate;
 
-    document.querySelectorAll('.date-preset-btn').forEach(btn => {
+    document.querySelectorAll('.date-preset-group .date-preset-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.preset === presetKey);
     });
   },

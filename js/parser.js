@@ -103,29 +103,47 @@ const NMC_PARSER = {
     // Format: YYYY-MM-DD
     if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
 
-    // Format: M/D/YY or M/D/YYYY (e.g. "8/1/26" or "8/15/2026")
-    const mdy = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
-    if (mdy) {
-      let month = mdy[1].padStart(2, '0');
-      let day = mdy[2].padStart(2, '0');
-      let year = mdy[3];
-      if (year.length === 2) year = '20' + year;
+    // Format: DD Month YYYY (e.g. "22 Jul 2026, 12:22" or "22 July 2026")
+    const months = { jan:'01', feb:'02', mar:'03', apr:'04', may:'05', jun:'06', jul:'07', aug:'08', sep:'09', oct:'10', nov:'11', dec:'12' };
+    const monthTextMatch = str.match(/^(\d{1,2})\s+([a-zA-Z]{3,9})\s+(\d{4})/);
+    if (monthTextMatch) {
+      const day = monthTextMatch[1].padStart(2, '0');
+      const mStr = monthTextMatch[2].toLowerCase().substring(0, 3);
+      const month = months[mStr] || '08';
+      const year = monthTextMatch[3];
       return `${year}-${month}-${day}`;
     }
 
-    // Format: DD-MM-YYYY or DD/MM/YYYY (e.g. "22-07-2026")
-    const dmy = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+    // Format: DD-MM-YYYY or MM/DD/YYYY or M/D/YY
+    const dmy = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})/);
     if (dmy) {
-      let day = dmy[1].padStart(2, '0');
-      let month = dmy[2].padStart(2, '0');
+      let p1 = parseInt(dmy[1], 10);
+      let p2 = parseInt(dmy[2], 10);
       let year = dmy[3];
-      return `${year}-${month}-${day}`;
+      if (year.length === 2) year = '20' + year;
+
+      if (p1 > 12) {
+        // Definitely DD/MM/YYYY
+        return `${year}-${String(p2).padStart(2, '0')}-${String(p1).padStart(2, '0')}`;
+      } else if (p2 > 12) {
+        // Definitely MM/DD/YYYY
+        return `${year}-${String(p1).padStart(2, '0')}-${String(p2).padStart(2, '0')}`;
+      } else {
+        // Default Google Ads M/D/YY format (e.g. 8/1/26) or DD/MM/YYYY if hyphenated (22-07-2026)
+        if (str.includes('-')) {
+          return `${year}-${String(p2).padStart(2, '0')}-${String(p1).padStart(2, '0')}`;
+        }
+        return `${year}-${String(p1).padStart(2, '0')}-${String(p2).padStart(2, '0')}`;
+      }
     }
 
-    // Format: "22 Jul 2026, 12:22"
+    // Standard JavaScript Date parsing fallback
     const textDate = new Date(str);
     if (!isNaN(textDate.getTime())) {
-      return textDate.toISOString().split('T')[0];
+      const y = textDate.getFullYear();
+      const m = String(textDate.getMonth() + 1).padStart(2, '0');
+      const d = String(textDate.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
     }
 
     return '2026-08-01';

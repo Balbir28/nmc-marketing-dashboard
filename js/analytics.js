@@ -10,9 +10,13 @@ const NMC_ANALYTICS = {
 
     // 1. Date Filtering
     if (filters.startDate && filters.endDate) {
-      filteredAds = filteredAds.filter(a => a.Date >= filters.startDate && a.Date <= filters.endDate);
+      filteredAds = filteredAds.filter(a => {
+        const adDate = NMC_PARSER.normalizeDate(a.Date || a.Day);
+        return adDate >= filters.startDate && adDate <= filters.endDate;
+      });
       filteredLeads = filteredLeads.filter(l => {
-        const leadDate = (l['Created At'] || '').split(' ')[0];
+        const rawDate = l['Created At'] || l['Created_At'] || l['Appointment Date'] || '';
+        const leadDate = NMC_PARSER.normalizeDate(rawDate);
         return leadDate >= filters.startDate && leadDate <= filters.endDate;
       });
     }
